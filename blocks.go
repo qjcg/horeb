@@ -29,6 +29,31 @@ func (b *UnicodeBlock) PrintRandom(num int) {
 	}
 	fmt.Println()
 }
+
+// implementing the flag.Value interface
+func (b *UnicodeBlock) Set(value string) error {
+	vals := strings.Split(value, ",")
+	if len(vals) == 1 {
+		end, err := strconv.ParseInt(vals[0], 0, 0)
+		if err != nil {
+			return err
+		}
+		b.end = int(end)
+	} else if len(vals) == 2 {
+		start, err := strconv.ParseInt(vals[0], 0, 0)
+		end, err := strconv.ParseInt(vals[1], 0, 0)
+		if err != nil {
+			return err
+		}
+		b.start = int(start)
+		b.end = int(end)
+	}
+	return nil
+}
+
+// implementing the flag.Value interface
+func (b *UnicodeBlock) String() string {
+	return fmt.Sprint(*b)
 }
 
 // See http:en.wikipedia.org/wiki/Plane_(Unicode)
