@@ -18,6 +18,12 @@ func printBlocks(all bool) {
 	}
 }
 
+var blockFlag UnicodeBlock
+
+func init() {
+	flag.Var(&blockFlag, "r", "codepoint range")
+}
+
 func main() {
 	rand.Seed(time.Now().UnixNano())
 
@@ -37,6 +43,13 @@ func main() {
 		os.Exit(0)
 	}
 
+	var b *UnicodeBlock
+	if blockFlag.end > 0 {
+		b.start = blockFlag.start
+		b.end = blockFlag.end
+		b.PrintRandom(*nchars)
+		os.Exit(0)
+	}
 
 	b, valid := Blocks[*block]
 	// If invalid block passed in, use a default instead
