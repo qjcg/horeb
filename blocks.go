@@ -62,6 +62,8 @@ func (b *UnicodeBlock) String() string {
 	return fmt.Sprint(*b)
 }
 
+// For info about fonts supporting specific unicode blocks, see for example:
+// http://www.fileformat.info/info/unicode/block/index.htm
 var Blocks = map[string]*UnicodeBlock{
 	// Basic Multilingual Plane (0000-ffff)
 	// https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane
