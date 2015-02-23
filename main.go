@@ -26,7 +26,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	// If valid plane provided as flag, use it
+	// If valid block provided, use it
 	if *block != "" {
 		b := Blocks[*block]
 		if b.high != 0 {
