@@ -8,22 +8,24 @@ import (
 )
 
 type UnicodeBlock struct {
-	start, end int
+	start, end rune
 }
 
-func (b *UnicodeBlock) RandomCodePoint() int {
-	return rand.Intn(b.end-b.start) + b.start + 1
+func (b *UnicodeBlock) RandomCodePoint() rune {
+	return rune(rand.Intn(int(b.end-b.start)) + int(b.start) + 1)
 }
 
 func (b *UnicodeBlock) Print() {
 	for i := b.start; i <= b.end; i++ {
-		fmt.Printf("%c ", i)
+		if strconv.IsPrint(i) {
+			fmt.Printf("%c ", i)
+		}
 	}
 	fmt.Println()
 }
 
 func (b *UnicodeBlock) Length() int {
-	return b.end - b.start
+	return int(b.end - b.start)
 }
 
 // Print num random characters from block.
@@ -42,15 +44,15 @@ func (b *UnicodeBlock) Set(value string) error {
 		if err != nil {
 			return err
 		}
-		b.end = int(end)
+		b.end = rune(end)
 	} else if len(vals) == 2 {
 		start, err := strconv.ParseInt(vals[0], 0, 0)
 		end, err := strconv.ParseInt(vals[1], 0, 0)
 		if err != nil {
 			return err
 		}
-		b.start = int(start)
-		b.end = int(end)
+		b.start = rune(start)
+		b.end = rune(end)
 	}
 	return nil
 }
