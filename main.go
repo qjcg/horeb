@@ -8,42 +8,40 @@ import (
 	"time"
 )
 
+func printBlocks(all bool) {
+	for name, block := range Blocks {
+		fmt.Printf("%s: %U, %U\n", name, block.start, block.end)
+		if all {
+			block.Print()
+			fmt.Println()
+		}
+	}
+}
+
 func main() {
 	rand.Seed(time.Now().UnixNano())
 
-	low := flag.Int("l", 0, "low unicode codepoint")
-	high := flag.Int("h", 0x10ffff, "high unicode codepoint")
+	dumpBlocks := flag.Bool("d", false, "print all Blocks")
+	listBlocks := flag.Bool("l", false, "list all Blocks")
 	nchars := flag.Int("n", 300, "number of characters to print")
-	wrapWidth := flag.Int("w", 60, "line width")
 	block := flag.String("b", "geometric", "unicode block by name")
-	printMap := flag.Bool("m", false, "print Blocks map")
 	flag.Parse()
 
-	if *printMap {
-		for k, v := range Blocks {
-			fmt.Printf("%-15s: %U, %U\n", k, v.low, v.high)
-		}
+	if *dumpBlocks {
+		printBlocks(true)
 		os.Exit(0)
 	}
 
-	// If valid block provided, use it
-	if *block != "" {
-		b := Blocks[*block]
-		if b.high != 0 {
-			low = &b.low
-			high = &b.high
-		}
+	if *listBlocks {
+		printBlocks(false)
+		os.Exit(0)
 	}
 
-	defer fmt.Println()
-	lineWidth := 0
-	for i := 0; i < *nchars; i++ {
-		lineWidth += 2
-		if lineWidth >= *wrapWidth {
-			fmt.Println()
-			lineWidth = 0
-		}
-		randomCodepoint := rand.Intn(*high-*low) + *low
-		fmt.Printf("%c ", randomCodepoint)
+
+	b, valid := Blocks[*block]
+	// If invalid block passed in, use a default instead
+	if !valid {
+		b = Blocks["geometric"]
 	}
+	b.PrintRandom(*nchars)
 }
