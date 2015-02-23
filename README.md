@@ -2,7 +2,7 @@
 
 ![Mt. Horeb][mt-horeb]
 
-Speaking in tongues to stdout.
+Speaking in tongues via stdout.
 
 Somewhat inspired by the [TempleOS](http://templeos.org)
 [oracle](https://www.youtube.com/watch?v=jqT-EgUN4y8).
