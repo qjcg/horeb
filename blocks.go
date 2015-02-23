@@ -1,17 +1,40 @@
 package main
 
+import (
+	"fmt"
+	"math/rand"
+	"strconv"
+	"strings"
+)
+
 type UnicodeBlock struct {
-	low, high int
+	start, end int
 }
 
-/*
-See:
-- http:en.wikipedia.org/wiki/Plane_(Unicode)
-- http:en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane
-- http:en.wikipedia.org/wiki/Plane_(Unicode)#Supplementary_Multilingual_Plane
-*/
+func (b *UnicodeBlock) RandomCodePoint() int {
+	return rand.Intn(b.end-b.start) + b.start + 1
+}
+
+func (b *UnicodeBlock) Print() {
+	for i := b.start; i <= b.end; i++ {
+		fmt.Printf("%c ", i)
+	}
+	fmt.Println()
+}
+
+// Print num random characters from block.
+func (b *UnicodeBlock) PrintRandom(num int) {
+	for i := 0; i < num; i++ {
+		fmt.Printf("%c ", b.RandomCodePoint())
+	}
+	fmt.Println()
+}
+}
+
+// See http:en.wikipedia.org/wiki/Plane_(Unicode)
 var Blocks = map[string]*UnicodeBlock{
 	// Basic Multilingual Plane (0000-ffff)
+	// http:en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane
 	"hebrew":       &UnicodeBlock{0x0590, 0x05ff},
 	"currency":     &UnicodeBlock{0x20a0, 0x20cf},
 	"letterlike":   &UnicodeBlock{0x2100, 0x214f},
@@ -19,6 +42,7 @@ var Blocks = map[string]*UnicodeBlock{
 	"misc_symbols": &UnicodeBlock{0x2600, 0x26ff},
 	"dingbats":     &UnicodeBlock{0x2700, 0x27bf},
 	// Supplementary Multilingual Plane (10000-1ffff)
+	// http:en.wikipedia.org/wiki/Plane_(Unicode)#Supplementary_Multilingual_Plane
 	"aegean_nums":        &UnicodeBlock{0x10100, 0x1013f},
 	"ancient_greek_nums": &UnicodeBlock{0x10140, 0x1018f},
 	"phaistos_disc":      &UnicodeBlock{0x101d0, 0x101ff},
