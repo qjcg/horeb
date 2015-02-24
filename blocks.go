@@ -24,10 +24,6 @@ func (b *UnicodeBlock) Print() {
 	fmt.Println()
 }
 
-func (b *UnicodeBlock) Length() int {
-	return int(b.end - b.start)
-}
-
 // Print num random characters from block.
 func (b *UnicodeBlock) PrintRandom(num int) {
 	for i := 0; i < num; i++ {
