@@ -10,7 +10,7 @@ import (
 
 func printBlocks(all bool) {
 	for name, block := range Blocks {
-		fmt.Printf("%s: %U, %U\n", name, block.start, block.end)
+		fmt.Printf("%5x, %5x: %s\n", block.start, block.end, name)
 		if all {
 			block.Print()
 			fmt.Println()
