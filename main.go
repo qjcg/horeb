@@ -2,9 +2,7 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"math/rand"
-	"os"
 	"time"
 )
 
@@ -17,34 +15,32 @@ func init() {
 func main() {
 	rand.Seed(time.Now().UnixNano())
 
-	dumpBlocks := flag.Bool("d", false, "print all Blocks")
-	listBlocks := flag.Bool("l", false, "list all Blocks")
-	nchars := flag.Int("n", 300, "number of characters to print")
-	block := flag.String("b", "geometric", "unicode block by name")
+	dump := flag.Bool("d", false, "print all Blocks")
+	list := flag.Bool("l", false, "list all Blocks")
+	nchars := flag.Int("n", 80, "number of characters to print")
+	block := flag.String("b", "", "unicode block by name")
 	flag.Parse()
 
-	if *dumpBlocks {
-		printBlocks(true)
-		os.Exit(0)
-	}
-
-	if *listBlocks {
-		printBlocks(false)
-		os.Exit(0)
-	}
-
-	var b *UnicodeBlock
-	if blockFlag.end > 0 {
-		b.start = blockFlag.start
-		b.end = blockFlag.end
-		b.PrintRandom(*nchars)
-		os.Exit(0)
-	}
-
+	// If invalid Blocks key specified, use a default instead
 	b, valid := Blocks[*block]
-	// If invalid block passed in, use a default instead
 	if !valid {
 		b = Blocks["geometric"]
 	}
-	b.PrintRandom(*nchars)
+
+	switch {
+	case *dump:
+		if *block != "" {
+			b.Print()
+		} else {
+			printBlocks(true)
+		}
+	case *list:
+		printBlocks(false)
+	case blockFlag.end > 0:
+		b.start = blockFlag.start
+		b.end = blockFlag.end
+		b.PrintRandom(*nchars)
+	default:
+		b.PrintRandom(*nchars)
+	}
 }
