@@ -9,7 +9,7 @@ import (
 var blockFlag UnicodeBlock
 
 func init() {
-	flag.Var(&blockFlag, "r", "codepoint range")
+	flag.Var(&blockFlag, "r", "comma separated codepoint range (eg. 0x0000,0x23ff)")
 }
 
 func main() {
