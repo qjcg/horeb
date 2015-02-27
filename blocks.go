@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -53,21 +54,24 @@ func (b *UnicodeBlock) PrintRandom(num int) {
 	fmt.Println()
 }
 
+func check(e error) {
+	if e != nil {
+		log.Fatal(e)
+	}
+}
+
 // implementing the flag.Value interface
 func (b *UnicodeBlock) Set(value string) error {
 	vals := strings.Split(value, ",")
 	if len(vals) == 1 {
 		end, err := strconv.ParseInt(vals[0], 0, 0)
-		if err != nil {
-			return err
-		}
+		check(err)
 		b.end = rune(end)
 	} else if len(vals) == 2 {
 		start, err := strconv.ParseInt(vals[0], 0, 0)
+		check(err)
 		end, err := strconv.ParseInt(vals[1], 0, 0)
-		if err != nil {
-			return err
-		}
+		check(err)
 		b.start = rune(start)
 		b.end = rune(end)
 	}
