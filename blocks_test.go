@@ -5,10 +5,9 @@ import (
 )
 
 func TestRandomCodePoint(t *testing.T) {
+	var cp rune
 	for _, b := range Blocks {
-		var cp rune
 		cp = b.RandomCodePoint()
-
 		if cp < b.start || cp > b.end {
 			t.Fail()
 		}
