@@ -8,16 +8,6 @@ import (
 	"time"
 )
 
-func printBlocks(all bool) {
-	for name, block := range Blocks {
-		fmt.Printf("%5x, %5x: %s\n", block.start, block.end, name)
-		if all {
-			block.Print()
-			fmt.Println()
-		}
-	}
-}
-
 var blockFlag UnicodeBlock
 
 func init() {
