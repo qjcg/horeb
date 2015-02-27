@@ -14,9 +14,20 @@ func TestRandomCodePoint(t *testing.T) {
 	}
 }
 
+func TestRandomBlock(t *testing.T) {
+	b := Blocks.RandomBlock()
+	b.RandomCodePoint()
+}
+
 func BenchmarkRandomCodePoint(b *testing.B) {
 	testBlock := &UnicodeBlock{0x0000, 0x10ffff}
 	for i := 0; i < b.N; i++ {
 		testBlock.RandomCodePoint()
+	}
+}
+
+func BenchmarkRandomBlock(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Blocks.RandomBlock()
 	}
 }
