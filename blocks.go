@@ -24,7 +24,7 @@ func (bmap BlockMap) RandomBlock() *UnicodeBlock {
 
 func printBlocks(all bool) {
 	for name, block := range Blocks {
-		fmt.Printf("%5x, %5x: %s\n", block.start, block.end, name)
+		fmt.Printf("%5x %5x  %s\n", block.start, block.end, name)
 		if all {
 			block.Print()
 			fmt.Println()
