@@ -11,6 +11,17 @@ type UnicodeBlock struct {
 	start, end rune
 }
 
+type BlockMap map[string]*UnicodeBlock
+
+func (bmap BlockMap) RandomBlock() *UnicodeBlock {
+	var keys []string
+	for k := range bmap {
+		keys = append(keys, k)
+	}
+	randKey := keys[rand.Intn(len(keys))]
+	return bmap[randKey]
+}
+
 func printBlocks(all bool) {
 	for name, block := range Blocks {
 		fmt.Printf("%5x, %5x: %s\n", block.start, block.end, name)
@@ -70,7 +81,7 @@ func (b *UnicodeBlock) String() string {
 
 // For info about fonts supporting specific unicode blocks, see for example:
 // http://www.fileformat.info/info/unicode/block/index.htm
-var Blocks = map[string]*UnicodeBlock{
+var Blocks = BlockMap{
 	// Basic Multilingual Plane (0000-ffff)
 	// https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane
 	"hebrew":         &UnicodeBlock{0x0590, 0x05ff},
