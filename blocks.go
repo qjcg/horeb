@@ -2,90 +2,17 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"math/rand"
 	"strconv"
-	"strings"
 )
 
 type UnicodeBlock struct {
 	start, end rune
 }
 
-type BlockMap map[string]*UnicodeBlock
-
-func (bmap BlockMap) RandomBlock() *UnicodeBlock {
-	var keys []string
-	for k := range bmap {
-		keys = append(keys, k)
-	}
-	randKey := keys[rand.Intn(len(keys))]
-	return bmap[randKey]
-}
-
-func printBlocks(all bool) {
-	for name, block := range Blocks {
-		fmt.Printf("%5x %5x  %s\n", block.start, block.end, name)
-		if all {
-			block.Print()
-			fmt.Println()
-		}
-	}
-}
-
-func (b *UnicodeBlock) RandomCodePoint() rune {
-	return rune(rand.Intn(int(b.end-b.start)) + int(b.start) + 1)
-}
-
-func (b *UnicodeBlock) Print() {
-	for i := b.start; i <= b.end; i++ {
-		if strconv.IsPrint(i) {
-			fmt.Printf("%c ", i)
-		}
-	}
-	fmt.Println()
-}
-
-// Print num random characters from block.
-func (b *UnicodeBlock) PrintRandom(num int) {
-	for i := 0; i < num; i++ {
-		fmt.Printf("%c ", b.RandomCodePoint())
-	}
-	fmt.Println()
-}
-
-func check(e error) {
-	if e != nil {
-		log.Fatal(e)
-	}
-}
-
-// implementing the flag.Value interface
-func (b *UnicodeBlock) Set(value string) error {
-	vals := strings.Split(value, ",")
-	if len(vals) == 1 {
-		end, err := strconv.ParseInt(vals[0], 0, 0)
-		check(err)
-		b.end = rune(end)
-	} else if len(vals) == 2 {
-		start, err := strconv.ParseInt(vals[0], 0, 0)
-		check(err)
-		end, err := strconv.ParseInt(vals[1], 0, 0)
-		check(err)
-		b.start = rune(start)
-		b.end = rune(end)
-	}
-	return nil
-}
-
-// implementing the flag.Value interface
-func (b *UnicodeBlock) String() string {
-	return fmt.Sprint(*b)
-}
-
 // For info about fonts supporting specific unicode blocks, see for example:
 // http://www.fileformat.info/info/unicode/block/index.htm
-var Blocks = BlockMap{
+var Blocks = map[string]*UnicodeBlock{
 	// Basic Multilingual Plane (0000-ffff)
 	// https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane
 	"hebrew":         &UnicodeBlock{0x0590, 0x05ff},
@@ -105,4 +32,47 @@ var Blocks = BlockMap{
 	"mahjong":            &UnicodeBlock{0x1f000, 0x1f02f},
 	"dominos":            &UnicodeBlock{0x1f030, 0x1f09f},
 	"playing_cards":      &UnicodeBlock{0x1f0a0, 0x1f0ff},
+}
+
+// Returns a *UnicodeBlock at random from a string:*UnicodeBlock map provided as argument.
+func RandomBlock(m map[string]*UnicodeBlock) *UnicodeBlock {
+	var keys []string
+	for k := range m {
+		keys = append(keys, k)
+	}
+	randKey := keys[rand.Intn(len(keys))]
+	return m[randKey]
+}
+
+func printBlocks(all bool) {
+	for name, block := range Blocks {
+		fmt.Printf("%5x %5x  %s\n", block.start, block.end, name)
+		if all {
+			block.Print()
+			fmt.Println()
+		}
+	}
+}
+
+// Returns a single rune at random from UnicodeBlock.
+func (b *UnicodeBlock) RandomRune() rune {
+	return rune(rand.Intn(int(b.end-b.start)) + int(b.start) + 1)
+}
+
+// Print all printable runes in UnicodeBlock.
+func (b *UnicodeBlock) Print() {
+	for i := b.start; i <= b.end; i++ {
+		if strconv.IsPrint(i) {
+			fmt.Printf("%c ", i)
+		}
+	}
+	fmt.Println()
+}
+
+// Print n random runes from UnicodeBlock.
+func (b *UnicodeBlock) PrintRandom(n int) {
+	for i := 0; i < n; i++ {
+		fmt.Printf("%c ", b.RandomRune())
+	}
+	fmt.Println()
 }

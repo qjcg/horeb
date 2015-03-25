@@ -4,30 +4,30 @@ import (
 	"testing"
 )
 
-func TestRandomCodePoint(t *testing.T) {
-	var cp rune
+func TestRandomRune(t *testing.T) {
+	var r rune
 	for _, b := range Blocks {
-		cp = b.RandomCodePoint()
-		if cp < b.start || cp > b.end {
-			t.Fail()
+		r = b.RandomRune()
+		if r < b.start || r > b.end {
+			t.Errorf("rune %c outside of expected range: %x - %x\n", r, b.start, b.end)
 		}
 	}
 }
 
 func TestRandomBlock(t *testing.T) {
-	b := Blocks.RandomBlock()
-	b.RandomCodePoint()
+	b := RandomBlock(Blocks)
+	b.RandomRune()
 }
 
-func BenchmarkRandomCodePoint(b *testing.B) {
+func BenchmarkRandomRune(b *testing.B) {
 	ub := &UnicodeBlock{0x0000, 0x10ffff}
 	for i := 0; i < b.N; i++ {
-		ub.RandomCodePoint()
+		ub.RandomRune()
 	}
 }
 
 func BenchmarkRandomBlock(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		Blocks.RandomBlock()
+		RandomBlock(Blocks)
 	}
 }
