@@ -11,7 +11,7 @@ after_success:
 deploy:
   provider: releases
   api_key:
-    secure: "MmTHxUHULtl0rLISydkYzLejeaHowMv0HW3T5QWfLNr2lU8LbQjQagcz8obSVxTSxbpSBLgGtS4acWaVW+EoEMTzpl+CBF3Ez9Op1FW3dq3m5b6Rpbko09F8qqt2W9MTLVXwDO6ccxLjxpIoyWbcF/hGdwwmR40Bz/pwjwC3AmI="
+    secure: "CGaQemsd7Ug4AYfisbYmxfWyHfjwRTRFWNswDZJt1Vbd+DdoamycyRgrMNEVkKGpJ9Z+0YvqielhoLU1GQ1QO67U55NbDsOHaiHk+lx8AMfcXGyPgOPGrRt59ccAd3pf6XljWoUzcmwg2QYqX8RWgUaAGOHFIwU/ZFSf8wbI8T4="
   file: /tmp/horeb_linux_amd64.tar.gz
   skip_cleanup: true
   on:
