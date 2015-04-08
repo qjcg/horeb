@@ -3,6 +3,7 @@ go:
   - 1.4
 
 script:
+  - go test -v
   - go install -v
 after_success:
   - tar -C $HOME/gopath/bin -vzcf /tmp/horeb_linux_amd64.tar.gz horeb
