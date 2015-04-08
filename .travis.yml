@@ -1,18 +1,15 @@
 language: go
 go:
   - 1.4
-
 script:
   - go test -v
   - go install -v
 after_success:
   - tar -C $HOME/gopath/bin -vzcf /tmp/horeb_linux_amd64.tar.gz horeb
-
 deploy:
   provider: releases
   api_key:
-    secure: "CGaQemsd7Ug4AYfisbYmxfWyHfjwRTRFWNswDZJt1Vbd+DdoamycyRgrMNEVkKGpJ9Z+0YvqielhoLU1GQ1QO67U55NbDsOHaiHk+lx8AMfcXGyPgOPGrRt59ccAd3pf6XljWoUzcmwg2QYqX8RWgUaAGOHFIwU/ZFSf8wbI8T4="
+    secure: mm12M3WVwqJKedKQlgLR99XyrRo1r8aBHoQlx+pR/bY73gCN1+MquK/sjeyGoS47v+6xTYwTAGm7VR8Jau35oPsdAyYpV/vUK8J22ikdWjWDlCqSCvG4QGK2dkT2SkLt5SY7iETgtGMZ66044DM9E1J/f1q2Rnuvs8pfK2Amzhg=
   file: /tmp/horeb_linux_amd64.tar.gz
-  skip_cleanup: true
   on:
     tags: true
