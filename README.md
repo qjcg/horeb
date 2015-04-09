@@ -12,12 +12,15 @@ Somewhat inspired by the [TempleOS](http://templeos.org) [oracle].
 go get -u github.com/qjcg/horeb
 ```
 
+Alternatively, you can download the [latest binary release here].
+
 ## Font Support
 
-For information about which fonts support which unicode blocks, see [fileformat.info].
+For information about fonts supporting specific unicode blocks, see [fileformat.info].
 
 [build-logo]: https://travis-ci.org/qjcg/horeb.svg?branch=master
 [horeb-travis]: https://travis-ci.org/qjcg/horeb
 [mt-horeb]: http://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Francis_Frith_%28English_-_Mount_Horeb%2C_Sinai_-_Google_Art_Project_%286787000%29.jpg/306px-Francis_Frith_%28English_-_Mount_Horeb%2C_Sinai_-_Google_Art_Project_%286787000%29.jpg "Mt. Horeb"
 [oracle]: https://www.youtube.com/watch?v=jqT-EgUN4y8
+[latest binary release here]: https://github.com/qjcg/horeb/releases/latest
 [fileformat.info]: http://www.fileformat.info/info/unicode/block/index.htm
