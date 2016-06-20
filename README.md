@@ -14,6 +14,22 @@ go get -u github.com/qjcg/horeb
 
 Alternatively, you can download the [latest binary release here].
 
+
+## Test
+
+Run main unit test suite:
+
+```
+go test
+```
+
+Run unit and integration tests (after a successful "go install"):
+
+```sh
+go test -tags integration
+```
+
+
 ## Font Support
 
 For information about fonts supporting specific unicode blocks, see [fileformat.info].
