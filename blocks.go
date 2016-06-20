@@ -50,10 +50,18 @@ func RandomBlock(m map[string]*UnicodeBlock) (*UnicodeBlock, error) {
 }
 
 func printBlocks(all bool) {
-	for name, block := range Blocks {
-		fmt.Printf("%5x %5x  %s\n", block.start, block.end, name)
+	// create a slice of alphabetically-sorted keys
+	var keys []string
+	for k := range Blocks {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	for _, k := range keys {
+		b := Blocks[k]
+		fmt.Printf("%5x %5x  %s\n", b.start, b.end, k)
 		if all {
-			block.Print()
+			b.Print()
 			fmt.Println()
 		}
 	}
