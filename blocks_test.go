@@ -15,7 +15,10 @@ func TestRandomRune(t *testing.T) {
 }
 
 func TestRandomBlock(t *testing.T) {
-	b := RandomBlock(Blocks)
+	b, err := RandomBlock(Blocks)
+	if err != nil {
+		t.Fatal("RandomBlock error", err)
+	}
 	b.RandomRune()
 }
 

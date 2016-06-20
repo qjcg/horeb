@@ -1,8 +1,10 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"math/rand"
+	"sort"
 	"strconv"
 )
 
@@ -34,14 +36,17 @@ var Blocks = map[string]*UnicodeBlock{
 	"playing_cards":      &UnicodeBlock{0x1f0a0, 0x1f0ff},
 }
 
-// Returns a *UnicodeBlock at random from a string:*UnicodeBlock map provided as argument.
-func RandomBlock(m map[string]*UnicodeBlock) *UnicodeBlock {
+// Returns a *UnicodeBlock at random from a map[string]*UnicodeBlock provided as argument.
+func RandomBlock(m map[string]*UnicodeBlock) (*UnicodeBlock, error) {
+	if len(m) == 0 {
+		return &UnicodeBlock{}, errors.New("Empty map provided")
+	}
 	var keys []string
 	for k := range m {
 		keys = append(keys, k)
 	}
 	randKey := keys[rand.Intn(len(keys))]
-	return m[randKey]
+	return m[randKey], nil
 }
 
 func printBlocks(all bool) {
