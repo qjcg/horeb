@@ -40,3 +40,8 @@ For information about fonts supporting specific unicode blocks, see [fileformat.
 [oracle]: https://www.youtube.com/watch?v=jqT-EgUN4y8
 [latest binary release here]: https://github.com/qjcg/horeb/releases/latest
 [fileformat.info]: http://www.fileformat.info/info/unicode/block/index.htm
+
+
+## License
+
+MIT.
