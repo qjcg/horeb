@@ -29,7 +29,7 @@ func main() {
 	nchars := flag.Int("n", 30, "number of characters to print")
 	flag.Parse()
 
-	blocks := []string{"geometric"}
+	blocks := []string{"all"}
 	if flag.NArg() > 0 {
 		blocks = flag.Args()
 		// special all value means all blocks
