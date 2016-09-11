@@ -21,6 +21,7 @@ func TestNoArgs(t *testing.T) {
 
 func TestBadArg(t *testing.T) {
 	out, err := exec.Command(cmdName, "NOT_A_BLOCK").CombinedOutput()
+	// FIXME: bad test, look at exit status instead
 	if err != nil {
 		t.Fatalf("%s\n%s\n", err, out)
 	}

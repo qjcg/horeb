@@ -32,6 +32,13 @@ func main() {
 	blocks := []string{"geometric"}
 	if flag.NArg() > 0 {
 		blocks = flag.Args()
+		// special all value means all blocks
+		if blocks[0] == "all" {
+			// FIXME: remove blocks[0] ("all") to avoid error
+			for k := range Blocks {
+				blocks = append(blocks, k)
+			}
+		}
 	}
 
 	switch {
@@ -43,12 +50,18 @@ func main() {
 	case *dump:
 		printBlocks(true)
 	case len(blocks) == 1:
-		Blocks[blocks[0]].PrintRandom(*nchars)
+		if b, ok := Blocks[blocks[0]]; ok {
+			b.PrintRandom(*nchars)
+		} else {
+			log.Fatalf("Unknown block name: %s\n", blocks[0])
+		}
 	case len(blocks) > 1:
-		var bm map[string]*UnicodeBlock
+		bm := map[string]*UnicodeBlock{}
 		for _, b := range blocks {
 			if val, ok := Blocks[b]; ok {
 				bm[b] = val
+			} else {
+				log.Printf("Unknown block name: %s\n", b)
 			}
 		}
 		if len(bm) > 0 {
