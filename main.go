@@ -32,12 +32,13 @@ func main() {
 	blocks := []string{"all"}
 	if flag.NArg() > 0 {
 		blocks = flag.Args()
-		// special all value means all blocks
-		if blocks[0] == "all" {
-			// FIXME: remove blocks[0] ("all") to avoid error
-			for k := range Blocks {
-				blocks = append(blocks, k)
-			}
+	}
+	// special value means all blocks
+	if blocks[0] == "all" {
+		// remove "all" value after use
+		blocks = blocks[:0]
+		for k := range Blocks {
+			blocks = append(blocks, k)
 		}
 	}
 
