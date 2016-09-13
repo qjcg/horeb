@@ -54,7 +54,7 @@ func main() {
 		if b, ok := Blocks[blocks[0]]; ok {
 			b.PrintRandom(*nchars)
 		} else {
-			log.Fatalf("Unknown block name: %s\n", blocks[0])
+			log.Fatalf("Unknown block: %s\n", blocks[0])
 		}
 	case len(blocks) > 1:
 		bm := map[string]*UnicodeBlock{}
@@ -62,7 +62,7 @@ func main() {
 			if val, ok := Blocks[b]; ok {
 				bm[b] = val
 			} else {
-				log.Printf("Unknown block name: %s\n", b)
+				log.Printf("Unknown block: %s\n", b)
 			}
 		}
 		if len(bm) > 0 {
