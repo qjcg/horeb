@@ -6,11 +6,20 @@ package main
 // go test -v -tags integration
 
 import (
+	"fmt"
 	"os/exec"
 	"testing"
 )
 
 const cmdName = "horeb"
+
+func TestHelp(t *testing.T) {
+	out, err := exec.Command(cmdName, "-h").CombinedOutput()
+	if err != nil {
+		t.Fatalf("%s\n%s\n", err, out)
+		fmt.Println(out)
+	}
+}
 
 func TestNoArgs(t *testing.T) {
 	out, err := exec.Command(cmdName).CombinedOutput()

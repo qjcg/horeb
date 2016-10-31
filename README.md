@@ -14,6 +14,23 @@ go get -u github.com/qjcg/horeb
 
 Alternatively, you can download the [latest binary release here].
 
+## Usage
+### Basic Usage
+```
+go run main.go blocks.go -h
+horeb: Speaking in tongues via stdout
+  -c    colorize output
+  -d    print all Blocks
+  -h    prints usage documentation
+  -l    list all Block names and codepoint ranges
+  -n int
+        number of characters to print (default 30)
+```
+### Advanced usage
+The following line will print a sequence of 30 characters composed of characters from the geometric and emoji sets
+```
+./horeb -n=30 geometric emoji
+```
 
 ## Test
 
