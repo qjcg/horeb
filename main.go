@@ -22,13 +22,16 @@ func main() {
 	rand.Seed(time.Now().UnixNano())
 
 	flag.Usage = usage
-
+	printusage := flag.Bool("h", false, "prints usage documentation")
 	color := flag.Bool("c", false, "colorize output")
 	dump := flag.Bool("d", false, "print all Blocks")
 	list := flag.Bool("l", false, "list all Block names and codepoint ranges")
 	nchars := flag.Int("n", 30, "number of characters to print")
 	flag.Parse()
-
+	if *printusage {
+		usage()
+		return
+	}
 	blocks := []string{"all"}
 	if flag.NArg() > 0 {
 		blocks = flag.Args()
