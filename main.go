@@ -23,8 +23,7 @@ func main() {
 
 	flag.Usage = usage
 
-	color := flag.Bool("c", false, "colorize output")
-	dump := flag.Bool("d", false, "print all Blocks")
+	dump := flag.Bool("d", false, "dump all runes from all Blocks to stdout")
 	list := flag.Bool("l", false, "list all Block names and codepoint ranges")
 	nchars := flag.Int("n", 30, "number of characters to print")
 	flag.Parse()
@@ -43,9 +42,6 @@ func main() {
 	}
 
 	switch {
-	case *color:
-		// TODO: implement colorized output
-		return
 	case *list:
 		printBlocks(false)
 	case *dump:
