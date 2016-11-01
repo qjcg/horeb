@@ -8,8 +8,8 @@ func TestRandomRune(t *testing.T) {
 	var r rune
 	for _, b := range Blocks {
 		r = b.RandomRune()
-		if r < b.start || r > b.end {
-			t.Errorf("rune %c outside of expected range: %x - %x\n", r, b.start, b.end)
+		if r < b.Start || r > b.End {
+			t.Errorf("rune %c outside of expected range: %x - %x\n", r, b.Start, b.End)
 		}
 	}
 }

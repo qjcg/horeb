@@ -9,7 +9,7 @@ import (
 )
 
 type UnicodeBlock struct {
-	start, end rune
+	Start, End rune
 }
 
 // For info about fonts supporting specific unicode blocks, see for example:
@@ -61,7 +61,7 @@ func printBlocks(all bool) {
 
 	for _, k := range keys {
 		b := Blocks[k]
-		fmt.Printf("%5x %5x  %s\n", b.start, b.end, k)
+		fmt.Printf("%5x %5x  %s\n", b.Start, b.End, k)
 		if all {
 			b.Print()
 			fmt.Println()
@@ -71,12 +71,12 @@ func printBlocks(all bool) {
 
 // RandomRune returns a single rune at random from UnicodeBlock.
 func (b UnicodeBlock) RandomRune() rune {
-	return rune(rand.Intn(int(b.end-b.start)) + int(b.start) + 1)
+	return rune(rand.Intn(int(b.End-b.Start)) + int(b.Start) + 1)
 }
 
 // Print prints all printable runes in UnicodeBlock.
 func (b UnicodeBlock) Print() {
-	for i := b.start; i <= b.end; i++ {
+	for i := b.Start; i <= b.End; i++ {
 		if strconv.IsPrint(i) {
 			fmt.Printf("%c ", i)
 		}
