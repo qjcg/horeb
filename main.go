@@ -47,19 +47,20 @@ func main() {
 	case *dump:
 		printBlocks(true)
 	case len(blocks) == 1:
-		if b, ok := Blocks[blocks[0]]; ok {
-			b.PrintRandom(*nchars)
-		} else {
+		b, ok := Blocks[blocks[0]]
+		if !ok {
 			log.Fatalf("Unknown block: %s\n", blocks[0])
 		}
+		b.PrintRandom(*nchars)
 	case len(blocks) > 1:
-		bm := map[string]*UnicodeBlock{}
+		bm := map[string]UnicodeBlock{}
 		for _, b := range blocks {
-			if val, ok := Blocks[b]; ok {
-				bm[b] = val
-			} else {
+			val, ok := Blocks[b]
+			if !ok {
 				log.Printf("Unknown block: %s\n", b)
+				continue
 			}
+			bm[b] = val
 		}
 		if len(bm) > 0 {
 			for i := 0; i < *nchars; i++ {
