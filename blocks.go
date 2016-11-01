@@ -77,9 +77,13 @@ func (b UnicodeBlock) RandomRune() rune {
 // Print prints all printable runes in UnicodeBlock.
 func (b UnicodeBlock) Print() {
 	for i := b.Start; i <= b.End; i++ {
-		if strconv.IsPrint(i) {
-			fmt.Printf("%c ", i)
+
+		// Only print printable runes.
+		if !strconv.IsPrint(i) {
+			continue
 		}
+
+		fmt.Printf("%c ", i)
 	}
 	fmt.Println()
 }
