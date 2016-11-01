@@ -2,12 +2,13 @@
 
 ![Mt. Horeb][mt-horeb]
 
-Speaking in tongues via stdout.
+*"Speaking in tongues via stdout."*
 
 Horeb is a CLI tool for generating random sequences of characters from various
 [Unicode blocks](https://en.wikipedia.org/wiki/Unicode_block).
 
-This tool is somewhat inspired by the [TempleOS](http://templeos.org) [oracle].
+One of the sources of inspiration for this tool is the
+[TempleOS](http://templeos.org) [oracle].
 
 
 ## Install
