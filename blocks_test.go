@@ -23,7 +23,7 @@ func TestRandomBlock(t *testing.T) {
 }
 
 func BenchmarkRandomRune(b *testing.B) {
-	ub := &UnicodeBlock{0x0000, 0x10ffff}
+	ub := UnicodeBlock{0x0000, 0x10ffff}
 	for i := 0; i < b.N; i++ {
 		ub.RandomRune()
 	}
