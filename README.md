@@ -4,7 +4,11 @@
 
 Speaking in tongues via stdout.
 
-Somewhat inspired by the [TempleOS](http://templeos.org) [oracle].
+Horeb is a CLI tool for generating random sequences of characters from various
+[Unicode blocks](https://en.wikipedia.org/wiki/Unicode_block).
+
+This tool is somewhat inspired by the [TempleOS](http://templeos.org) [oracle].
+
 
 ## Install
 
