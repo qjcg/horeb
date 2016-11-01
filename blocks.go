@@ -8,12 +8,12 @@ import (
 	"strconv"
 )
 
+// UnicodeBlock represents a contiguous range of Unicode codepoints.
 type UnicodeBlock struct {
 	Start, End rune
 }
 
-// For info about fonts supporting specific unicode blocks, see for example:
-// http://www.fileformat.info/info/unicode/block/index.htm
+// Blocks is a map of short string labels to UnicodeBlock values.
 var Blocks = map[string]UnicodeBlock{
 
 	// Basic Multilingual Plane (0000-ffff)
