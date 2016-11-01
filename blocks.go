@@ -36,7 +36,7 @@ var Blocks = map[string]*UnicodeBlock{
 	"playing_cards":      &UnicodeBlock{0x1f0a0, 0x1f0ff},
 }
 
-// Returns a *UnicodeBlock at random from a map[string]*UnicodeBlock provided as argument.
+// RandomBlock returns a *UnicodeBlock at random from a map[string]*UnicodeBlock provided as argument.
 func RandomBlock(m map[string]*UnicodeBlock) (*UnicodeBlock, error) {
 	if len(m) == 0 {
 		return &UnicodeBlock{}, errors.New("Empty map provided")
@@ -50,7 +50,7 @@ func RandomBlock(m map[string]*UnicodeBlock) (*UnicodeBlock, error) {
 }
 
 func printBlocks(all bool) {
-	// create a slice of alphabetically-sorted keys
+	// Create a slice of alphabetically-sorted keys.
 	var keys []string
 	for k := range Blocks {
 		keys = append(keys, k)
@@ -67,12 +67,12 @@ func printBlocks(all bool) {
 	}
 }
 
-// Returns a single rune at random from UnicodeBlock.
+// RandomRune returns a single rune at random from UnicodeBlock.
 func (b *UnicodeBlock) RandomRune() rune {
 	return rune(rand.Intn(int(b.end-b.start)) + int(b.start) + 1)
 }
 
-// Print all printable runes in UnicodeBlock.
+// Print prints all printable runes in UnicodeBlock.
 func (b *UnicodeBlock) Print() {
 	for i := b.start; i <= b.end; i++ {
 		if strconv.IsPrint(i) {
@@ -82,7 +82,7 @@ func (b *UnicodeBlock) Print() {
 	fmt.Println()
 }
 
-// Print n random runes from UnicodeBlock.
+// PrintRandom prints n random runes from UnicodeBlock.
 func (b *UnicodeBlock) PrintRandom(n int) {
 	for i := 0; i < n; i++ {
 		fmt.Printf("%c ", b.RandomRune())
