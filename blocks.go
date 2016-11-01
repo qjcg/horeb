@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-// UnicodeBlock represents a contiguous range of Unicode codepoints.
+// UnicodeBlock values represent a contiguous range of Unicode codepoints.
 type UnicodeBlock struct {
 	Start, End rune
 }
