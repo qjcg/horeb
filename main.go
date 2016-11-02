@@ -23,8 +23,8 @@ func main() {
 
 	flag.Usage = usage
 
-	dump := flag.Bool("d", false, "dump all runes from all Blocks to stdout")
-	list := flag.Bool("l", false, "list all Block names and codepoint ranges")
+	dump := flag.Bool("d", false, "dump all blocks")
+	list := flag.Bool("l", false, "list all blocks")
 	nchars := flag.Int("n", 30, "number of characters to print")
 	flag.Parse()
 
