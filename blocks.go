@@ -40,14 +40,15 @@ var Blocks = map[string]UnicodeBlock{
 
 // RandomBlock returns a UnicodeBlock at random from a map[string]UnicodeBlock provided as argument.
 func RandomBlock(m map[string]UnicodeBlock) (UnicodeBlock, error) {
-	if len(m) == 0 {
+	nkeys := len(m)
+	if nkeys < 1 {
 		return UnicodeBlock{}, errors.New("Empty map provided")
 	}
 	var keys []string
 	for k := range m {
 		keys = append(keys, k)
 	}
-	randKey := keys[rand.Intn(len(keys))]
+	randKey := keys[rand.Intn(nkeys)]
 	return m[randKey], nil
 }
 
