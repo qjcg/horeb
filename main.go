@@ -26,6 +26,7 @@ func main() {
 	dump := flag.Bool("d", false, "dump all blocks")
 	list := flag.Bool("l", false, "list all blocks")
 	nchars := flag.Int("n", 30, "number of characters to print")
+	ofs := flag.String("o", " ", "output field separator")
 	flag.Parse()
 
 	blocks := []string{"all"}
@@ -51,7 +52,7 @@ func main() {
 		if !ok {
 			log.Fatalf("Unknown block: %s\n", blocks[0])
 		}
-		b.PrintRandom(*nchars)
+		b.PrintRandom(*nchars, *ofs)
 	case len(blocks) > 1:
 		bm := map[string]UnicodeBlock{}
 		for _, b := range blocks {
@@ -68,7 +69,7 @@ func main() {
 				if err != nil {
 					log.Fatal(err)
 				}
-				fmt.Printf("%c ", block.RandomRune())
+				fmt.Printf("%c%s", block.RandomRune(), *ofs)
 			}
 		}
 		fmt.Println()
