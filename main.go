@@ -27,7 +27,13 @@ func main() {
 	list := flag.Bool("l", false, "list all blocks")
 	nchars := flag.Int("n", 30, "number of characters to print")
 	ofs := flag.String("o", " ", "output field separator")
+	version := flag.Bool("v", false, "print version")
 	flag.Parse()
+
+	if *version {
+		fmt.Println(Version)
+		return
+	}
 
 	blocks := []string{"all"}
 	if flag.NArg() > 0 {
