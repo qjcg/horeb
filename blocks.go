@@ -90,9 +90,9 @@ func (b UnicodeBlock) Print() {
 }
 
 // PrintRandom prints n random runes from UnicodeBlock.
-func (b UnicodeBlock) PrintRandom(n int) {
+func (b UnicodeBlock) PrintRandom(n int, ofs string) {
 	for i := 0; i < n; i++ {
-		fmt.Printf("%c ", b.RandomRune())
+		fmt.Printf("%c%s", b.RandomRune(), ofs)
 	}
 	fmt.Println()
 }
