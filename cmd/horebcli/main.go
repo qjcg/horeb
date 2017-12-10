@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	description = "horeb: Speaking in tongues via stdout"
+	description = "horebcli: Speaking in tongues via stdout"
 )
 
 func usage() {
@@ -29,6 +29,8 @@ func main() {
 	list := flag.Bool("l", false, "list all blocks")
 	nchars := flag.Int("n", 30, "number of runes to generate")
 	ofs := flag.String("o", " ", "output field separator")
+	stream := flag.Bool("s", false, "generate an endless stream of runes")
+	streamDelay := flag.Duration("D", time.Millisecond*30, "stream delay")
 	version := flag.Bool("v", false, "print version")
 	flag.Parse()
 
@@ -60,7 +62,15 @@ func main() {
 		if !ok {
 			log.Fatalf("Unknown block: %s\n", blocks[0])
 		}
-		b.PrintRandom(*nchars, *ofs)
+
+		if *stream {
+			ticker := time.NewTicker(*streamDelay)
+			for range ticker.C {
+				fmt.Printf("%c%s", b.RandomRune(), *ofs)
+			}
+		} else {
+			b.PrintRandom(*nchars, *ofs)
+		}
 	case len(blocks) > 1:
 		bm := map[string]horeb.UnicodeBlock{}
 		for _, b := range blocks {
@@ -72,14 +82,26 @@ func main() {
 			bm[b] = val
 		}
 		if len(bm) > 0 {
-			for i := 0; i < *nchars; i++ {
-				block, err := horeb.RandomBlock(bm)
-				if err != nil {
-					log.Fatal(err)
+			defer fmt.Println()
+			if *stream {
+				ticker := time.NewTicker(*streamDelay)
+				for range ticker.C {
+
+					block, err := horeb.RandomBlock(bm)
+					if err != nil {
+						log.Fatal(err)
+					}
+					fmt.Printf("%c%s", block.RandomRune(), *ofs)
 				}
-				fmt.Printf("%c%s", block.RandomRune(), *ofs)
+			} else {
+				for i := 0; i < *nchars; i++ {
+					block, err := horeb.RandomBlock(bm)
+					if err != nil {
+						log.Fatal(err)
+					}
+					fmt.Printf("%c%s", block.RandomRune(), *ofs)
+				}
 			}
 		}
-		fmt.Println()
 	}
 }
