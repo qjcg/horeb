@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package horeb;
+
+service Horeb {
+  rpc GetStream (RuneRequest) returns (stream Rune) {}
+}
+
+message RuneRequest {
+  int32 num = 1;
+}
+
+message Rune {
+  string r = 1;
+}
