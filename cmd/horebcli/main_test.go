@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-const cmdName = "horeb"
+const cmdName = "horebcli"
 
 func TestNoArgs(t *testing.T) {
 	out, err := exec.Command(cmdName).CombinedOutput()

@@ -1,4 +1,4 @@
-package main
+package horeb
 
 import (
 	"errors"
@@ -52,7 +52,7 @@ func RandomBlock(m map[string]UnicodeBlock) (UnicodeBlock, error) {
 	return m[randKey], nil
 }
 
-func printBlocks(all bool) {
+func PrintBlocks(all bool) {
 	// Create a slice of alphabetically-sorted keys.
 	var keys []string
 	for k := range Blocks {
