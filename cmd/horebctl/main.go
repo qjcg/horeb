@@ -33,12 +33,14 @@ func getRuneStream(client pb.HorebClient, rr *pb.RuneRequest) {
 }
 
 func main() {
-	num := flag.Int("n", 100, "number of runes to request")
+	ip := flag.String("i", "127.0.0.1", "ip address of horebd server")
+	port := flag.Int("p", 9999, "TCP port of horebd server")
+	num := flag.Int("n", 10, "number of runes to request")
 	flag.Parse()
 
 	var opts []grpc.DialOption
 	opts = append(opts, grpc.WithInsecure())
-	conn, err := grpc.Dial(":9999", opts...)
+	conn, err := grpc.Dial(fmt.Sprintf("%s:%d", *ip, *port), opts...)
 	if err != nil {
 		grpclog.Fatalf("fail to dial: %v", err)
 	}
