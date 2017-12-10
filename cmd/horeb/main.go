@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	description = "horebcli: Speaking in tongues via stdout"
+	description = "horeb: Speaking in tongues via stdout"
 )
 
 func usage() {
