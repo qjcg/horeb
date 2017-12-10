@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"io"
 
 	pb "github.com/qjcg/horeb/proto"
@@ -12,7 +13,7 @@ import (
 )
 
 func getRuneStream(client pb.HorebClient, rr *pb.RuneRequest) {
-	grpclog.Printf("Getting rune stream via RuneRequest: %v", rr)
+	grpclog.Printf("Sent: %#v", rr)
 
 	stream, err := client.GetStream(context.Background(), rr)
 	if err != nil {
@@ -27,7 +28,7 @@ func getRuneStream(client pb.HorebClient, rr *pb.RuneRequest) {
 		if err != nil {
 			grpclog.Fatal("stream receive error: %v", err)
 		}
-		grpclog.Printf("%v", streamedRune.R)
+		grpclog.Printf("Got: %#v", streamedRune)
 	}
 }
 
