@@ -25,7 +25,7 @@ func main() {
 
 	dump := flag.Bool("d", false, "dump all blocks")
 	list := flag.Bool("l", false, "list all blocks")
-	nchars := flag.Int("n", 30, "number of characters to print")
+	nchars := flag.Int("n", 30, "number of runes to generate")
 	ofs := flag.String("o", " ", "output field separator")
 	version := flag.Bool("v", false, "print version")
 	flag.Parse()
