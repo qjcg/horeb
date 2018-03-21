@@ -21,6 +21,7 @@ var Blocks = map[string]UnicodeBlock{
 	"hebrew":         UnicodeBlock{0x0590, 0x05ff},
 	"currency":       UnicodeBlock{0x20a0, 0x20cf},
 	"letterlike":     UnicodeBlock{0x2100, 0x214f},
+	"arrows":         UnicodeBlock{0x2190, 0x21ff},
 	"misc_technical": UnicodeBlock{0x2300, 0x23ff},
 	"geometric":      UnicodeBlock{0x25a0, 0x25ff},
 	"misc_symbols":   UnicodeBlock{0x2600, 0x26ff},
