@@ -15,6 +15,10 @@ import (
 
 var logger = grpclog.NewLoggerV2(os.Stderr, os.Stderr, os.Stderr)
 
+func init() {
+	grpclog.SetLoggerV2(logger)
+}
+
 // server is used to implement our horeb server.
 type server struct{}
 
