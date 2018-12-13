@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"os"
 
 	pb "github.com/qjcg/horeb/proto"
 
@@ -12,12 +13,14 @@ import (
 	"google.golang.org/grpc/grpclog"
 )
 
+var logger = grpclog.NewLoggerV2(os.Stderr, os.Stderr, os.Stderr)
+
 func getRuneStream(client pb.HorebClient, rr *pb.RuneRequest) {
-	grpclog.Printf("Sent: %#v", rr)
+	logger.Infof("Sent: %#v", rr)
 
 	stream, err := client.GetStream(context.Background(), rr)
 	if err != nil {
-		grpclog.Fatalf("%v.GetStream(_) = _, %v", client, err)
+		logger.Fatalf("%v.GetStream(_) = _, %v", client, err)
 	}
 
 	for {
@@ -26,9 +29,9 @@ func getRuneStream(client pb.HorebClient, rr *pb.RuneRequest) {
 			break
 		}
 		if err != nil {
-			grpclog.Fatal("stream receive error: %v", err)
+			logger.Fatalf("stream receive error: %v", err)
 		}
-		grpclog.Printf("Got: %#v", streamedRune)
+		logger.Infof("Got: %#v", streamedRune)
 	}
 }
 
@@ -42,7 +45,7 @@ func main() {
 	opts = append(opts, grpc.WithInsecure())
 	conn, err := grpc.Dial(fmt.Sprintf("%s:%d", *ip, *port), opts...)
 	if err != nil {
-		grpclog.Fatalf("fail to dial: %v", err)
+		logger.Fatalf("fail to dial: %v", err)
 	}
 	defer conn.Close()
 	client := pb.NewHorebClient(conn)

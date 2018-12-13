@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"net"
+	"os"
 
 	"github.com/qjcg/horeb"
 	pb "github.com/qjcg/horeb/proto"
@@ -13,18 +13,20 @@ import (
 	"google.golang.org/grpc/grpclog"
 )
 
+var logger = grpclog.NewLoggerV2(os.Stderr, os.Stderr, os.Stderr)
+
 // server is used to implement our horeb server.
 type server struct{}
 
 func (s server) GetStream(rr *pb.RuneRequest, stream pb.Horeb_GetStreamServer) error {
-	grpclog.Printf("Got: %#v", rr)
+	logger.Infof("Got: %#v", rr)
 	for i := 0; i < int(rr.Num); i++ {
 
 		myRandomRune := pb.Rune{R: string(horeb.Blocks["geometric"].RandomRune())}
 		if err := stream.Send(&myRandomRune); err != nil {
 			return err
 		}
-		grpclog.Printf("Sent: %#v", myRandomRune)
+		logger.Infof("Sent: %#v", myRandomRune)
 	}
 	return nil
 }
@@ -37,15 +39,15 @@ func main() {
 	listenString := fmt.Sprintf("%s:%s", *ip, *port)
 	lis, err := net.Listen("tcp", listenString)
 	if err != nil {
-		log.Fatalf("Failed to listen: %v", err)
+		logger.Fatalf("Failed to listen: %v", err)
 	}
 
 	s := grpc.NewServer()
 	pb.RegisterHorebServer(s, &server{})
 
-	grpclog.Printf("Horeb gRPC server listening on tcp://%s", listenString)
+	logger.Infof("Horeb gRPC server listening on tcp://%s", listenString)
 
 	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+		logger.Fatalf("failed to serve: %v", err)
 	}
 }
