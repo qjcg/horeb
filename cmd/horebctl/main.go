@@ -36,9 +36,9 @@ func getRuneStream(client pb.HorebClient, rr *pb.RuneRequest) {
 		if err != nil {
 			logger.Errorf("stream receive error: %v\n", err)
 		}
-		logger.Infof("RECEIVED: %#v", streamedRune)
 		fmt.Println(streamedRune.R)
 	}
+	logger.Infof("RECEIVED: %d %s", rr.Num, rr.Block)
 }
 
 func main() {
