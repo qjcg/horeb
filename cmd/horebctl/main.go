@@ -16,6 +16,10 @@ import (
 
 var logger = grpclog.NewLoggerV2(os.Stderr, os.Stderr, os.Stderr)
 
+func init() {
+	grpclog.SetLoggerV2(logger)
+}
+
 func getRuneStream(client pb.HorebClient, rr *pb.RuneRequest) {
 	logger.Infof("Sent: %#v", rr)
 
