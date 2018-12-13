@@ -8,6 +8,7 @@ service Horeb {
 
 message RuneRequest {
   int32 num = 1;
+  string block = 2;
 }
 
 message Rune {
