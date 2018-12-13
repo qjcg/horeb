@@ -23,15 +23,19 @@ func init() {
 type server struct{}
 
 func (s server) GetStream(rr *pb.RuneRequest, stream pb.Horeb_GetStreamServer) error {
-	logger.Infof("Got: %#v", rr)
+	logger.Infof("RECEIVED: %#v", rr)
+	block, ok := horeb.Blocks[rr.Block]
+	if !ok {
+		logger.Errorf("Invalid block: %s\n", rr.Block)
+		return fmt.Errorf("Invalid block: %s", rr.Block)
+	}
 	for i := 0; i < int(rr.Num); i++ {
-
-		myRandomRune := pb.Rune{R: string(horeb.Blocks["geometric"].RandomRune())}
+		myRandomRune := pb.Rune{R: string(block.RandomRune())}
 		if err := stream.Send(&myRandomRune); err != nil {
 			return err
 		}
-		logger.Infof("Sent: %#v", myRandomRune)
 	}
+	logger.Infof("SENT: %d %s\n", rr.Num, rr.Block)
 	return nil
 }
 
