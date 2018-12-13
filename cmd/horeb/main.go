@@ -35,7 +35,7 @@ func main() {
 	flag.Parse()
 
 	if *version {
-		fmt.Println(Version)
+		fmt.Println(horeb.Version)
 		return
 	}
 

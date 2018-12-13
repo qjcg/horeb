@@ -34,7 +34,13 @@ func (s server) GetStream(rr *pb.RuneRequest, stream pb.Horeb_GetStreamServer) e
 func main() {
 	ip := flag.String("i", "127.0.0.1", "ip address to listen on")
 	port := flag.String("p", "9999", "TCP port to listen on")
+	version := flag.Bool("v", false, "print version")
 	flag.Parse()
+
+	if *version {
+		fmt.Println(horeb.Version)
+		return
+	}
 
 	listenString := fmt.Sprintf("%s:%s", *ip, *port)
 	lis, err := net.Listen("tcp", listenString)
