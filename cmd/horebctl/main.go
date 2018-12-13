@@ -21,11 +21,11 @@ func init() {
 }
 
 func getRuneStream(client pb.HorebClient, rr *pb.RuneRequest) {
-	logger.Infof("Sent: %#v", rr)
+	logger.Infof("SENT: %#v\n", rr)
 
 	stream, err := client.GetStream(context.Background(), rr)
 	if err != nil {
-		logger.Fatalf("%v.GetStream(_) = _, %v", client, err)
+		logger.Fatalf("%v.GetStream(_) = _, %v\n", client, err)
 	}
 
 	for {
@@ -34,13 +34,15 @@ func getRuneStream(client pb.HorebClient, rr *pb.RuneRequest) {
 			break
 		}
 		if err != nil {
-			logger.Fatalf("stream receive error: %v", err)
+			logger.Errorf("stream receive error: %v\n", err)
 		}
-		logger.Infof("Got: %#v", streamedRune)
+		logger.Infof("RECEIVED: %#v", streamedRune)
+		fmt.Println(streamedRune.R)
 	}
 }
 
 func main() {
+	block := flag.String("b", "geometric", "unicode block name")
 	ip := flag.String("i", "127.0.0.1", "ip address of horebd server")
 	port := flag.Int("p", 9999, "TCP port of horebd server")
 	num := flag.Int("n", 10, "number of runes to request")
@@ -63,6 +65,6 @@ func main() {
 
 	getRuneStream(
 		client,
-		&pb.RuneRequest{Num: int32(*num)},
+		&pb.RuneRequest{Num: int32(*num), Block: *block},
 	)
 }
