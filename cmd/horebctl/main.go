@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 
+	"github.com/qjcg/horeb"
 	pb "github.com/qjcg/horeb/proto"
 
 	"google.golang.org/grpc"
@@ -39,7 +40,13 @@ func main() {
 	ip := flag.String("i", "127.0.0.1", "ip address of horebd server")
 	port := flag.Int("p", 9999, "TCP port of horebd server")
 	num := flag.Int("n", 10, "number of runes to request")
+	version := flag.Bool("v", false, "print version")
 	flag.Parse()
+
+	if *version {
+		fmt.Println(horeb.Version)
+		return
+	}
 
 	var opts []grpc.DialOption
 	opts = append(opts, grpc.WithInsecure())
