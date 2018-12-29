@@ -71,13 +71,13 @@ $ horeb -d
 Run main unit test suite:
 
 ```
-go test
+go test ./...
 ```
 
 Run unit and integration tests (after a successful "go install"):
 
 ```sh
-go test -tags integration
+go test -tags integration ./...
 ```
 
 
@@ -88,7 +88,7 @@ For information about fonts supporting specific unicode blocks, see [fileformat.
 [build-logo]: https://travis-ci.org/qjcg/horeb.svg?branch=master
 [horeb-travis]: https://travis-ci.org/qjcg/horeb
 [mt-horeb]: http://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Francis_Frith_%28English_-_Mount_Horeb%2C_Sinai_-_Google_Art_Project_%286787000%29.jpg/306px-Francis_Frith_%28English_-_Mount_Horeb%2C_Sinai_-_Google_Art_Project_%286787000%29.jpg "Mt. Horeb"
-[oracle]: https://www.youtube.com/watch?v=jqT-EgUN4y8
+[oracle]: https://youtu.be/8ETqBJZudpw?t=20
 [latest binary release here]: https://github.com/qjcg/horeb/releases/latest
 [fileformat.info]: http://www.fileformat.info/info/unicode/block/index.htm
 
