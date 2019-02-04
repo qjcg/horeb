@@ -1,0 +1,6 @@
+[Unit]
+Description=Horebd Per-Connection Daemon
+
+[Service]
+ExecStart=-/usr/bin/horebd
+KillMode=process

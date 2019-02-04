@@ -1,0 +1,10 @@
+[Unit]
+Description=Horeb daemon
+After=network.target
+
+[Service]
+DynamicUser=yes
+ExecStart=/usr/bin/horebd
+
+[Install]
+WantedBy=multi-user.target
