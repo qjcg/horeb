@@ -5,27 +5,77 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"io/ioutil"
+	"log"
 	"os"
 
 	"github.com/qjcg/horeb"
 	pb "github.com/qjcg/horeb/proto"
+	"github.com/spf13/viper"
 
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/grpclog"
 )
 
-var logger = grpclog.NewLoggerV2(os.Stderr, os.Stderr, os.Stderr)
+// Setup for global levelled logging.
+var (
+	info  = log.New(os.Stderr, "INFO ", log.LstdFlags)
+	debug = log.New(ioutil.Discard, "DEBUG ", log.LstdFlags)
+)
 
-func init() {
-	grpclog.SetLoggerV2(logger)
+func main() {
+	debugFlag := flag.Bool("d", false, "debug logging")
+	version := flag.Bool("v", false, "print version")
+	flag.Parse()
+
+	conf := viper.New()
+	conf.SetDefault("block", "geometric")
+	conf.SetDefault("host", "localhost")
+	conf.SetDefault("num", 5)
+	conf.SetDefault("port", 9999)
+
+	conf.SetEnvPrefix("HOREBCTL")
+	conf.BindEnv("block")
+	conf.BindEnv("host")
+	conf.BindEnv("num")
+	conf.BindEnv("port")
+
+	if *version {
+		fmt.Println(horeb.Version)
+		return
+	}
+
+	if *debugFlag {
+		debug.SetOutput(os.Stderr)
+	}
+
+	var opts []grpc.DialOption
+	opts = append(opts, grpc.WithInsecure())
+	conn, err := grpc.Dial(fmt.Sprintf("%s:%d", conf.GetString("host"), conf.GetInt("port")), opts...)
+	if err != nil {
+		info.Fatalf("fail to dial: %v", err)
+	}
+	defer conn.Close()
+	client := pb.NewHorebClient(conn)
+
+	err = getRuneStream(
+		client,
+		&pb.RuneRequest{
+			Num:   int32(conf.GetInt("num")),
+			Block: conf.GetString("block"),
+		},
+	)
+	if err != nil {
+		info.Fatal(err)
+	}
 }
 
-func getRuneStream(client pb.HorebClient, rr *pb.RuneRequest) {
-	logger.Infof("SENT: %#v\n", rr)
+func getRuneStream(client pb.HorebClient, rr *pb.RuneRequest) error {
+	debug.Printf("SENT: %#v\n", rr)
 
 	stream, err := client.GetStream(context.Background(), rr)
 	if err != nil {
-		logger.Fatalf("%v.GetStream(_) = _, %v\n", client, err)
+		info.Printf("%v.GetStream(_) = _, %v\n", client, err)
+		return err
 	}
 
 	for {
@@ -34,37 +84,11 @@ func getRuneStream(client pb.HorebClient, rr *pb.RuneRequest) {
 			break
 		}
 		if err != nil {
-			logger.Errorf("stream receive error: %v\n", err)
+			info.Printf("stream receive error: %v\n", err)
 		}
 		fmt.Println(streamedRune.R)
 	}
-	logger.Infof("RECEIVED: %d %s", rr.Num, rr.Block)
-}
+	debug.Printf("RECEIVED: %d %s", rr.Num, rr.Block)
 
-func main() {
-	block := flag.String("b", "geometric", "unicode block name")
-	ip := flag.String("i", "127.0.0.1", "ip address of horebd server")
-	port := flag.Int("p", 9999, "TCP port of horebd server")
-	num := flag.Int("n", 10, "number of runes to request")
-	version := flag.Bool("v", false, "print version")
-	flag.Parse()
-
-	if *version {
-		fmt.Println(horeb.Version)
-		return
-	}
-
-	var opts []grpc.DialOption
-	opts = append(opts, grpc.WithInsecure())
-	conn, err := grpc.Dial(fmt.Sprintf("%s:%d", *ip, *port), opts...)
-	if err != nil {
-		logger.Fatalf("fail to dial: %v", err)
-	}
-	defer conn.Close()
-	client := pb.NewHorebClient(conn)
-
-	getRuneStream(
-		client,
-		&pb.RuneRequest{Num: int32(*num), Block: *block},
-	)
+	return nil
 }
