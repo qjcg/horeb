@@ -1,3 +1,4 @@
 *.swp
 .dbg_history
 debug
+*.pkg.tar.xz
