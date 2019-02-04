@@ -2,7 +2,7 @@ module github.com/qjcg/horeb
 
 require (
 	github.com/BurntSushi/toml v0.3.1 // indirect
-	github.com/coreos/go-systemd v0.0.0-20181031085051-9002847aa142
+	github.com/coreos/go-systemd v0.0.0-20190204112023-081494f7ee4f
 	github.com/golang/protobuf v1.2.0
 	golang.org/x/net v0.0.0-20190125091013-d26f9f9a57f3
 	golang.org/x/sync v0.0.0-20181221193216-37e7f081c4d4 // indirect
