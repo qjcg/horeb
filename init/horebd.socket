@@ -1,0 +1,9 @@
+[Unit]
+Conflicts=horebd.service
+
+[Socket]
+ListenStream=9999
+Accept=yes
+
+[Install]
+WantedBy=sockets.target

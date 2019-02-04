@@ -3,9 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"net"
 	"os"
 
+	"github.com/coreos/go-systemd/activation"
 	"github.com/qjcg/horeb"
 	pb "github.com/qjcg/horeb/proto"
 
@@ -15,8 +17,43 @@ import (
 
 var logger = grpclog.NewLoggerV2(os.Stderr, os.Stderr, os.Stderr)
 
-func init() {
-	grpclog.SetLoggerV2(logger)
+func main() {
+	ip := flag.String("i", "0.0.0.0", "ip address to listen on")
+	port := flag.String("p", "9999", "TCP port to listen on")
+	version := flag.Bool("v", false, "print version")
+	flag.Parse()
+
+	if *version {
+		fmt.Println(horeb.Version)
+		return
+	}
+
+	var lis net.Listener
+	listeners, err := activation.Listeners()
+	if err != nil {
+		log.Fatalf("Couldn't get listeners: %s\n", err)
+	}
+
+	listenFlags := fmt.Sprintf("%s:%s", *ip, *port)
+	if len(listeners) == 1 {
+		lis = listeners[0]
+		logger.Infof("Using systemd listener: %#v\n", lis)
+	} else {
+		lis, err = net.Listen("tcp", listenFlags)
+		if err != nil {
+			logger.Fatalf("Failed to listen: %v", err)
+		}
+		logger.Infof("Using flag listener: %#v\n", lis)
+	}
+
+	s := grpc.NewServer()
+	pb.RegisterHorebServer(s, &server{})
+
+	logger.Infof("Horeb gRPC server listening on tcp://%s", listenFlags)
+
+	if err := s.Serve(lis); err != nil {
+		logger.Fatalf("failed to serve: %v", err)
+	}
 }
 
 // server is used to implement our horeb server.
@@ -37,31 +74,4 @@ func (s server) GetStream(rr *pb.RuneRequest, stream pb.Horeb_GetStreamServer) e
 	}
 	logger.Infof("SENT: %d %s\n", rr.Num, rr.Block)
 	return nil
-}
-
-func main() {
-	ip := flag.String("i", "0.0.0.0", "ip address to listen on")
-	port := flag.String("p", "9999", "TCP port to listen on")
-	version := flag.Bool("v", false, "print version")
-	flag.Parse()
-
-	if *version {
-		fmt.Println(horeb.Version)
-		return
-	}
-
-	listenString := fmt.Sprintf("%s:%s", *ip, *port)
-	lis, err := net.Listen("tcp", listenString)
-	if err != nil {
-		logger.Fatalf("Failed to listen: %v", err)
-	}
-
-	s := grpc.NewServer()
-	pb.RegisterHorebServer(s, &server{})
-
-	logger.Infof("Horeb gRPC server listening on tcp://%s", listenString)
-
-	if err := s.Serve(lis); err != nil {
-		logger.Fatalf("failed to serve: %v", err)
-	}
 }

@@ -20,21 +20,22 @@ import (
 var (
 	info  = log.New(os.Stderr, "INFO ", log.LstdFlags)
 	debug = log.New(ioutil.Discard, "DEBUG ", log.LstdFlags)
+
+	sep = flag.String("s", " ", "rune separator")
 )
 
 func main() {
+	block := flag.String("b", "geometric", "unicode block")
 	debugFlag := flag.Bool("d", false, "debug logging")
+	num := flag.Int("n", 5, "number of runes to print")
 	version := flag.Bool("v", false, "print version")
 	flag.Parse()
 
 	conf := viper.New()
-	conf.SetDefault("block", "geometric")
 	conf.SetDefault("host", "localhost")
-	conf.SetDefault("num", 5)
 	conf.SetDefault("port", 9999)
 
 	conf.SetEnvPrefix("HOREBCTL")
-	conf.BindEnv("block")
 	conf.BindEnv("host")
 	conf.BindEnv("num")
 	conf.BindEnv("port")
@@ -60,8 +61,8 @@ func main() {
 	err = getRuneStream(
 		client,
 		&pb.RuneRequest{
-			Num:   int32(conf.GetInt("num")),
-			Block: conf.GetString("block"),
+			Num:   int32(*num),
+			Block: *block,
 		},
 	)
 	if err != nil {
@@ -86,7 +87,7 @@ func getRuneStream(client pb.HorebClient, rr *pb.RuneRequest) error {
 		if err != nil {
 			info.Printf("stream receive error: %v\n", err)
 		}
-		fmt.Println(streamedRune.R)
+		fmt.Printf("%s%s", streamedRune.R, *sep)
 	}
 	debug.Printf("RECEIVED: %d %s", rr.Num, rr.Block)
 
