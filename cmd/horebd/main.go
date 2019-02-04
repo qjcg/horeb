@@ -29,12 +29,15 @@ func main() {
 	}
 
 	var lis net.Listener
+	listenFlags := fmt.Sprintf("%s:%s", *ip, *port)
+
+	// Use systemd socket listener if available, otherwise fall back to
+	// listenFlags parameters.
 	listeners, err := activation.Listeners()
 	if err != nil {
 		log.Fatalf("Couldn't get listeners: %s\n", err)
 	}
 
-	listenFlags := fmt.Sprintf("%s:%s", *ip, *port)
 	if len(listeners) == 1 {
 		lis = listeners[0]
 		logger.Infof("Using systemd listener: %#v\n", lis)
@@ -49,7 +52,7 @@ func main() {
 	s := grpc.NewServer()
 	pb.RegisterHorebServer(s, &server{})
 
-	logger.Infof("Horeb gRPC server listening on tcp://%s", listenFlags)
+	logger.Infof("Horeb gRPC server listening on %#v", lis)
 
 	if err := s.Serve(lis); err != nil {
 		logger.Fatalf("failed to serve: %v", err)
