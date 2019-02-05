@@ -1,12 +1,12 @@
 GO := go1.12beta2
 MODULE := $(shell go list -m)
 VERSION := $(shell git describe --tags)
-PKGVER := $(shell git describe --tags --abbrev=0 | tr -d v)
+PKGVER := $(shell git describe --tags --abbrev=0 | tr -d v)	# Used in holo packages
 
 OUTDIR := $(PWD)/build/package
 BINARIES := horeb horebd horebctl
-GOARCHES := amd64 arm
-ARCHARCHES := x86_64 armv7h
+GOARCHES := amd64 arm	
+ARCHARCHES := x86_64 armv7h					# Used in holo packages
 
 
 all: package
@@ -39,6 +39,7 @@ package: compress package-templates
 	@$(foreach arch,$(ARCHARCHES),holo-build -f --format=pacman ./build/package/holo-$(arch).toml; )
 
 clean:
+	@echo Removing build artifacts
 	rm -f $(wildcard $(OUTDIR)/horeb*)
 
 .PHONY: all proto build build-arm build-amd64 compress package-templates package clean
