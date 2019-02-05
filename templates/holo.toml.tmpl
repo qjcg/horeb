@@ -2,18 +2,16 @@
 name = "horeb"
 version = "{{.Version}}"
 author = "John Gosset <john@gossetx.com>"
-description = "A gRPC example daemon"
+description = "Speaking in tongues via stdout"
 architecture = "{{.Architecture}}"
-
-{{ range .Binaries | split "," }}
+{{range .Binaries | split ","}}
 [[file]]
 path = "/usr/bin/{{.}}"
 contentFrom = "../../{{.}}"
 mode = "0755"
 owner = "root"
 group = "root"
-{{ end }}
-
+{{end}}
 [[file]]
 path = "/usr/lib/systemd/system/horebd.service"
 contentFrom = "../../init/horebd.service"
