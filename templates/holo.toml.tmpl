@@ -1,0 +1,36 @@
+[package]
+name = "horeb"
+version = "{{.Version}}"
+author = "John Gosset <john@gossetx.com>"
+description = "A gRPC example daemon"
+architecture = "{{.Architecture}}"
+
+{{ range .Binaries | split "," }}
+[[file]]
+path = "/usr/bin/{{.}}"
+contentFrom = "../../{{.}}"
+mode = "0755"
+owner = "root"
+group = "root"
+{{ end }}
+
+[[file]]
+path = "/usr/lib/systemd/system/horebd.service"
+contentFrom = "../../init/horebd.service"
+mode = "0644"
+owner = "root"
+group = "root"
+
+[[file]]
+path = "/usr/lib/systemd/system/horebd.socket"
+contentFrom = "../../init/horebd.socket"
+mode = "0644"
+owner = "root"
+group = "root"
+
+[[file]]
+path = "/usr/lib/systemd/system/horebd@.service"
+contentFrom = "../../init/horebd@.service"
+mode = "0644"
+owner = "root"
+group = "root"
