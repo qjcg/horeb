@@ -4,8 +4,8 @@ VERSION := $(shell git describe --tags)
 PKGVER := $(shell git describe --tags --abbrev=0 | tr -d v)	# Used in holo packages
 
 OUTDIR := $(PWD)/build/package
-BINARIES := horeb horebd horebctl
-GOARCHES := amd64 arm	
+BINARIES := $(shell ls cmd)
+GOARCHES := amd64 arm
 ARCHARCHES := x86_64 armv7h					# Used in holo packages
 
 
