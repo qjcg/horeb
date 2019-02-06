@@ -37,17 +37,17 @@ compress: build
 # See https://github.com/gliderlabs/sigil
 package-templates:
 	@echo Generating holo templates
-	@sigil -f templates/holo.toml.tmpl Architecture="x86_64" Version=$(PKGVER) Binaries='' > $(OUTDIR_AMD64)/holo.toml
-	@sigil -f templates/holo.toml.tmpl Architecture="armv7h" Version=$(PKGVER) Binaries='' > $(OUTDIR_ARM)/holo.toml
+	@sigil -f templates/holo.toml.tmpl Architecture="x86_64" Version=$(PKGVER) Binaries='horeb,horebd,horebctl' > $(OUTDIR_AMD64)/holo.toml
+	@sigil -f templates/holo.toml.tmpl Architecture="armv7h" Version=$(PKGVER) Binaries='horeb,horebd,horebctl' > $(OUTDIR_ARM)/holo.toml
 
 package: compress package-templates
 	@echo Building holo packages
 
-	# Link files referenced in holo.toml file.
+	@# Link files referenced in holo.toml file.
 	@$(foreach d,$(OUTDIR_AMD64) $(OUTDIR_ARM),ln -s $(PWD)/LICENSE $(PWD)/init/* $(d); )
 
-	@holo-build -f --format=pacman $(OUTDIR_AMD64)/holo.toml
-	@holo-build -f --format=pacman $(OUTDIR_ARM)/holo.toml
+	@cd $(OUTDIR_AMD64); holo-build -f --format=pacman holo.toml
+	@cd $(OUTDIR_ARM); holo-build -f --format=pacman holo.toml
 
 clean:
 	@echo Removing build artifacts
