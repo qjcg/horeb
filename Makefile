@@ -44,7 +44,7 @@ package: compress package-templates
 	@echo Building holo packages
 
 	# Link files referenced in holo.toml file.
-	@$(foreach d,$(OUTDIR_AMD64) $(OUTDIR_ARM),ln -s LICENSE init/* $(d); )
+	@$(foreach d,$(OUTDIR_AMD64) $(OUTDIR_ARM),ln -s $(PWD)/LICENSE $(PWD)/init/* $(d); )
 
 	@holo-build -f --format=pacman $(OUTDIR_AMD64)/holo.toml
 	@holo-build -f --format=pacman $(OUTDIR_ARM)/holo.toml
