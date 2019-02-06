@@ -4,6 +4,9 @@ VERSION := $(shell git describe --tags)
 PKGVER := $(shell git describe --tags --abbrev=0 | tr -d v)	# Used in holo packages
 
 OUTDIR := $(PWD)/build/package
+OUTDIR_ARM := $(OUTDIR)/arm
+OUTDIR_AMD64 := $(OUTDIR)/amd64
+
 BINARIES := $(shell ls cmd)
 GOARCHES := amd64 arm
 ARCHARCHES := x86_64 armv7h					# Used in holo packages
@@ -18,28 +21,36 @@ build: build-arm build-amd64
 
 build-arm:
 	@echo Compiling: arm
-	@$(foreach bin,$(BINARIES),env GOARCH=arm GOARM=7 $(GO) build -ldflags '-X $(MODULE).Version=$(VERSION) -s -w' -o $(OUTDIR)/$(bin)-arm_$(VERSION) ./cmd/$(bin); )
+	@mkdir -p $(OUTDIR_ARM)
+	@$(foreach bin,$(BINARIES),env GOARCH=arm GOARM=7 $(GO) build -ldflags '-X $(MODULE).Version=$(VERSION) -s -w' -o $(OUTDIR_ARM)/$(bin) ./cmd/$(bin); )
 
 build-amd64:
 	@echo Compiling: amd64
-	@$(foreach bin,$(BINARIES),$(GO) build -ldflags '-X $(MODULE).Version=$(VERSION) -s -w' -o $(OUTDIR)/$(bin)-amd64_$(VERSION) ./cmd/$(bin); )
+	@mkdir -p $(OUTDIR_AMD64)
+	@$(foreach bin,$(BINARIES),$(GO) build -ldflags '-X $(MODULE).Version=$(VERSION) -s -w' -o $(OUTDIR_AMD64)/$(bin) ./cmd/$(bin); )
 
 compress: build
 	@echo Compressing binaries
-	@upx $(wildcard $(OUTDIR)/horeb*)
+	@upx $(wildcard $(OUTDIR)/*/horeb*)
 
 # The sigil tool renders Go template files.
 # See https://github.com/gliderlabs/sigil
 package-templates:
 	@echo Generating holo templates
-	@$(foreach arch,$(ARCHARCHES),sigil -f templates/holo.toml.tmpl Architecture=$(arch) Version=$(PKGVER) Binaries='' > build/package/holo-$(arch).toml; )
+	@sigil -f templates/holo.toml.tmpl Architecture="x86_64" Version=$(PKGVER) Binaries='' > $(OUTDIR_AMD64)/holo.toml
+	@sigil -f templates/holo.toml.tmpl Architecture="armv7h" Version=$(PKGVER) Binaries='' > $(OUTDIR_ARM)/holo.toml
 
 package: compress package-templates
 	@echo Building holo packages
-	@$(foreach arch,$(ARCHARCHES),holo-build -f --format=pacman ./build/package/holo-$(arch).toml; )
+
+	# Link files referenced in holo.toml file.
+	@$(foreach d,$(OUTDIR_AMD64) $(OUTDIR_ARM),ln -s LICENSE init/* $(d); )
+
+	@holo-build -f --format=pacman $(OUTDIR_AMD64)/holo.toml
+	@holo-build -f --format=pacman $(OUTDIR_ARM)/holo.toml
 
 clean:
 	@echo Removing build artifacts
-	rm -f $(wildcard $(OUTDIR)/horeb*)
+	@rm -rf $(OUTDIR)
 
 .PHONY: all proto build build-arm build-amd64 compress package-templates package clean
