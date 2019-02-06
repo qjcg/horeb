@@ -2,15 +2,12 @@ GO := go1.12beta2
 MODULE := $(shell go list -m)
 VERSION := $(shell git describe --tags)
 PKGVER := $(shell git describe --tags --abbrev=0 | tr -d v)	# Used in holo packages
+BINARIES := $(shell ls cmd)
+HOLO_TEMPLATE := ./templates/holo.toml.tmpl
 
 OUTDIR := $(PWD)/build/package
 OUTDIR_ARM := $(OUTDIR)/arm
 OUTDIR_AMD64 := $(OUTDIR)/amd64
-
-BINARIES := $(shell ls cmd)
-GOARCHES := amd64 arm
-ARCHARCHES := x86_64 armv7h					# Used in holo packages
-
 
 all: package
 
@@ -35,10 +32,10 @@ compress: build
 
 # The sigil tool renders Go template files.
 # See https://github.com/gliderlabs/sigil
-package-templates:
+package-templates: $(HOLO_TEMPLATE)
 	@echo Generating holo templates
-	@sigil -f templates/holo.toml.tmpl Architecture="x86_64" Version=$(PKGVER) Binaries='horeb,horebd,horebctl' > $(OUTDIR_AMD64)/holo.toml
-	@sigil -f templates/holo.toml.tmpl Architecture="armv7h" Version=$(PKGVER) Binaries='horeb,horebd,horebctl' > $(OUTDIR_ARM)/holo.toml
+	@sigil -f $(HOLO_TEMPLATE) Architecture="x86_64" Version=$(PKGVER) Binaries='horeb,horebd,horebctl' > $(OUTDIR_AMD64)/holo.toml
+	@sigil -f $(HOLO_TEMPLATE) Architecture="armv7h" Version=$(PKGVER) Binaries='horeb,horebd,horebctl' > $(OUTDIR_ARM)/holo.toml
 
 package: compress package-templates
 	@echo Building holo packages
