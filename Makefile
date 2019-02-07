@@ -50,6 +50,7 @@ $(DIST_PACKAGES): compress $(HOLO_FILES)
 
 	@cd $(OUTDIR_AMD64); holo-build -f --format=pacman holo.toml
 	@cd $(OUTDIR_ARM); holo-build -f --format=pacman holo.toml
+	@cd $(OUTDIR_ARM); holo-build -f --format=debian holo.toml
 
 clean:
 	@echo Removing build artifacts
