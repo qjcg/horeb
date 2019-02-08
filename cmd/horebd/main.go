@@ -38,6 +38,8 @@ func main() {
 		log.Fatalf("Couldn't get listeners: %s\n", err)
 	}
 
+	logger.Infof("Systemd listeners: %#v", listeners)
+
 	if len(listeners) == 1 {
 		lis = listeners[0]
 		logger.Infof("Using systemd listener: %#v\n", lis)
@@ -55,7 +57,7 @@ func main() {
 	logger.Infof("Horeb gRPC server listening on %#v", lis)
 
 	if err := s.Serve(lis); err != nil {
-		logger.Fatalf("failed to serve: %v", err)
+		logger.Fatalf("failed to serve: %#v", err)
 	}
 }
 
