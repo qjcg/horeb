@@ -1,4 +1,4 @@
-GO := go1.12beta2
+GO := go1.12rc1
 MODULE := $(shell go list -m)
 VERSION := $(shell git describe --tags)
 PKGVER := $(shell git describe --tags --abbrev=0 | tr -d v)	# Used in holo packages
