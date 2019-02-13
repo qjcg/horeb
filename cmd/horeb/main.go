@@ -15,9 +15,9 @@ const (
 )
 
 func usage() {
-	fmt.Printf("\n%s\n\n", description)
+	fmt.Fprintf(flag.CommandLine.Output(), "\n%s\n\n", description)
 	flag.PrintDefaults()
-	fmt.Println()
+	fmt.Fprintln(flag.CommandLine.Output())
 }
 
 func main() {
