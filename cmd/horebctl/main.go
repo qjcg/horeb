@@ -9,7 +9,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/qjcg/horeb"
+	"github.com/qjcg/horeb/pkg/horeb"
 	pb "github.com/qjcg/horeb/proto"
 	"github.com/spf13/viper"
 
