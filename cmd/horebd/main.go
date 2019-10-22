@@ -8,7 +8,7 @@ import (
 	"os"
 
 	"github.com/coreos/go-systemd/activation"
-	"github.com/qjcg/horeb"
+	"github.com/qjcg/horeb/pkg/horeb"
 	pb "github.com/qjcg/horeb/proto"
 
 	"google.golang.org/grpc"
