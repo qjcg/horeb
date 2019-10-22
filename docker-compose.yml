@@ -1,0 +1,32 @@
+version: "3.7"
+
+services:
+
+  # The service.
+  horebd:
+    build:
+      context: .
+      target: horebd
+    image: horebd
+    networks:
+      - main
+    ports:
+      - "9999:9999"
+    environment:
+      HOREBD_DEBUG: 'false'
+
+  # The client tool.
+  horebctl:
+    build:
+      context: .
+      target: horebctl
+    image: horebctl
+    networks:
+      - main
+    environment:
+      HOREBCTL_DEBUG: 'false'
+
+
+
+networks:
+  main:
