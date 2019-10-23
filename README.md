@@ -7,7 +7,7 @@
 Horeb is a CLI tool for generating random sequences of characters from various
 [Unicode blocks](https://en.wikipedia.org/wiki/Unicode_block).
 
-One source of inspiration for this tool is the [TempleOS](http://templeos.org)
+One source of inspiration for this tool is the [TempleOS](https://templeos.org)
 [oracle].
 
 
@@ -88,7 +88,7 @@ For information about fonts supporting specific unicode blocks, see [fileformat.
 [build-logo]: https://travis-ci.org/qjcg/horeb.svg?branch=master
 [horeb-travis]: https://travis-ci.org/qjcg/horeb
 [mt-horeb]: http://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Francis_Frith_%28English_-_Mount_Horeb%2C_Sinai_-_Google_Art_Project_%286787000%29.jpg/306px-Francis_Frith_%28English_-_Mount_Horeb%2C_Sinai_-_Google_Art_Project_%286787000%29.jpg "Mt. Horeb"
-[oracle]: https://youtu.be/8ETqBJZudpw?t=20
+[oracle]: https://www.youtube.com/watch?v=TwleMumdD64
 [latest binary release here]: https://github.com/qjcg/horeb/releases/latest
 [fileformat.info]: http://www.fileformat.info/info/unicode/block/index.htm
 
