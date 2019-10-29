@@ -26,6 +26,8 @@ var Blocks = map[string]UnicodeBlock{
 	"geometric":      UnicodeBlock{0x25a0, 0x25ff},
 	"misc_symbols":   UnicodeBlock{0x2600, 0x26ff},
 	"dingbats":       UnicodeBlock{0x2700, 0x27bf},
+	"cyrillic":       UnicodeBlock{0x0400, 0x04ff},
+	"tibetian":       UnicodeBlock{0x0f00, 0x0fff},
 
 	// Supplementary Multilingual Plane (10000-1ffff)
 	// https://en.wikipedia.org/wiki/Plane_(Unicode)#Supplementary_Multilingual_Plane
@@ -37,6 +39,9 @@ var Blocks = map[string]UnicodeBlock{
 	"mahjong":            UnicodeBlock{0x1f000, 0x1f02f},
 	"dominos":            UnicodeBlock{0x1f030, 0x1f09f},
 	"playing_cards":      UnicodeBlock{0x1f0a0, 0x1f0ff},
+	"chess":              UnicodeBlock{0x1fa00, 0x1fa6f},
+	"mayan_numerals":     UnicodeBlock{0x1d2e0, 0x1d2ff},
+	"gothic":             UnicodeBlock{0x10330, 0x1034f},
 }
 
 // RandomBlock returns a UnicodeBlock at random from a map[string]UnicodeBlock provided as argument.
