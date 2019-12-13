@@ -11,8 +11,8 @@ import (
 
 	"github.com/qjcg/horeb/pkg/horeb"
 	pb "github.com/qjcg/horeb/proto"
-	"github.com/spf13/viper"
 
+	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 )
 
