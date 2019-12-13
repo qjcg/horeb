@@ -11,8 +11,8 @@ install: proto
 
 .PHONY: build_images
 build_images: proto
-	docker build --build-arg VERSION=$(VERSION) --target horebd -t horebd .
-	docker build --build-arg VERSION=$(VERSION) --target horebctl -t horebctl .
+	docker build --build-arg VERSION=$(VERSION) --target horebd -t horebd:latest -t horebd:$(VERSION) .
+	docker build --build-arg VERSION=$(VERSION) --target horebctl -t horebctl:latest -t horebctl:$(VERSION) .
 
 # proto is simply an alias.
 .PHONY: proto
