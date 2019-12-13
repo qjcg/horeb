@@ -25,6 +25,7 @@ services:
       - main
     environment:
       HOREBCTL_DEBUG: 'false'
+      HOREBCTL_HOST: horebd
 
 
 
