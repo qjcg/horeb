@@ -14,6 +14,13 @@ build_images: proto
 	docker build --build-arg VERSION=$(VERSION) --target horebd -t horebd .
 	docker build --build-arg VERSION=$(VERSION) --target horebctl -t horebctl .
 
+# proto is simply an alias.
 .PHONY: proto
-proto: proto/horeb.proto
+proto: proto/horeb.pb.go
+
+proto/horeb.pb.go: proto/horeb.proto
 	protoc -I proto/ proto/horeb.proto --go_out=plugins=grpc:proto
+
+.PHONY: clean
+clean:
+	-rm proto/horeb.pb.go
