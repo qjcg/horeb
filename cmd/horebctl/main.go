@@ -82,6 +82,8 @@ func getRuneStream(client pb.HorebClient, rr *pb.RuneRequest) error {
 	for {
 		streamedRune, err := stream.Recv()
 		if err == io.EOF {
+			// Add a newline at the end of the stream before breaking.
+			fmt.Println()
 			break
 		}
 		if err != nil {
