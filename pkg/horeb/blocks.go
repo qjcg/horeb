@@ -39,7 +39,7 @@ var Blocks = map[string]UnicodeBlock{
 	"mahjong":            UnicodeBlock{0x1f000, 0x1f02f},
 	"dominos":            UnicodeBlock{0x1f030, 0x1f09f},
 	"playing_cards":      UnicodeBlock{0x1f0a0, 0x1f0ff},
-	"chess":              UnicodeBlock{0x1fa00, 0x1fa6f},
+	"chess":              UnicodeBlock{0x1fa00, 0x1fa53},
 	"mayan_numerals":     UnicodeBlock{0x1d2e0, 0x1d2ff},
 	"gothic":             UnicodeBlock{0x10330, 0x1034f},
 }
