@@ -1,13 +1,14 @@
-PACKAGE := github.com/qjcg/horeb/pkg/horeb
 VERSION := $(shell git describe --tags)
+VERSION_IMPORTPATH := github.com/qjcg/horeb/pkg/horeb.Version
 
 
+.PHONY: all
 all: install
 
+.PHONY: install
 install: proto
-	go install -ldflags '-s -w -X $(PACKAGE).Version=$(VERSION)' ./...
+	go install -ldflags '-s -w -X $(VERSION_IMPORTPATH)=$(VERSION)' ./...
 
+.PHONY: proto
 proto: proto/horeb.proto
 	protoc -I proto/ proto/horeb.proto --go_out=plugins=grpc:proto
-
-.PHONY: all proto install
