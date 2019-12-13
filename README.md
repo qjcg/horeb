@@ -83,7 +83,7 @@ go test -tags integration ./...
 
 ## Font Support
 
-For information about fonts supporting specific unicode blocks, see [fileformat.info].
+For information about fonts supporting specific Unicode blocks, see [fileformat.info].
 
 [build-logo]: https://travis-ci.org/qjcg/horeb.svg?branch=master
 [horeb-travis]: https://travis-ci.org/qjcg/horeb
