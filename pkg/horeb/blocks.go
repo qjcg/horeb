@@ -76,7 +76,7 @@ func PrintBlocks(all bool) {
 	}
 }
 
-// RandomRune returns a single rune at random from UnicodeBlock.
+// RandomRune returns a rune at random from UnicodeBlock.
 func (b UnicodeBlock) RandomRune() rune {
 	return rune(rand.Intn(int(b.End-b.Start)) + int(b.Start) + 1)
 }
