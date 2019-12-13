@@ -3,7 +3,6 @@ module github.com/qjcg/horeb
 go 1.13
 
 require (
-	github.com/coreos/go-systemd v0.0.0-20190719114852-fd7a80b32e1f
 	github.com/golang/protobuf v1.3.2
 	github.com/pelletier/go-toml v1.6.0 // indirect
 	github.com/spf13/afero v1.2.2 // indirect
