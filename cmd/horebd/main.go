@@ -3,11 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"net"
 	"os"
 
-	"github.com/coreos/go-systemd/activation"
 	"github.com/qjcg/horeb/pkg/horeb"
 	pb "github.com/qjcg/horeb/proto"
 
@@ -19,7 +17,7 @@ var logger = grpclog.NewLoggerV2(os.Stderr, os.Stderr, os.Stderr)
 
 func main() {
 	ip := flag.String("i", "0.0.0.0", "ip address to listen on")
-	port := flag.String("p", "9999", "TCP port to listen on")
+	port := flag.Int("p", 9999, "TCP port to listen on")
 	version := flag.Bool("v", false, "print version")
 	flag.Parse()
 
@@ -29,27 +27,12 @@ func main() {
 	}
 
 	var lis net.Listener
-	listenFlags := fmt.Sprintf("%s:%s", *ip, *port)
-
-	// Use systemd socket listener if available, otherwise fall back to
-	// listenFlags parameters.
-	listeners, err := activation.Listeners()
+	listenFlags := fmt.Sprintf("%s:%v", *ip, *port)
+	lis, err := net.Listen("tcp", listenFlags)
 	if err != nil {
-		log.Fatalf("Couldn't get listeners: %s\n", err)
+		logger.Fatalf("Failed to listen: %v", err)
 	}
-
-	logger.Infof("Systemd listeners: %#v", listeners)
-
-	if len(listeners) == 1 {
-		lis = listeners[0]
-		logger.Infof("Using systemd listener: %#v\n", lis)
-	} else {
-		lis, err = net.Listen("tcp", listenFlags)
-		if err != nil {
-			logger.Fatalf("Failed to listen: %v", err)
-		}
-		logger.Infof("Using flag listener: %#v\n", lis)
-	}
+	logger.Infof("Using flag listener: %#v\n", lis)
 
 	s := grpc.NewServer()
 	pb.RegisterHorebServer(s, &server{})
