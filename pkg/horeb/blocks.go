@@ -18,30 +18,30 @@ var Blocks = map[string]UnicodeBlock{
 
 	// Basic Multilingual Plane (0000-ffff)
 	// https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane
-	"hebrew":         UnicodeBlock{0x0590, 0x05ff},
-	"currency":       UnicodeBlock{0x20a0, 0x20cf},
-	"letterlike":     UnicodeBlock{0x2100, 0x214f},
-	"arrows":         UnicodeBlock{0x2190, 0x21ff},
-	"misc_technical": UnicodeBlock{0x2300, 0x23ff},
-	"geometric":      UnicodeBlock{0x25a0, 0x25ff},
-	"misc_symbols":   UnicodeBlock{0x2600, 0x26ff},
-	"dingbats":       UnicodeBlock{0x2700, 0x27bf},
-	"cyrillic":       UnicodeBlock{0x0400, 0x04ff},
-	"tibetian":       UnicodeBlock{0x0f00, 0x0fff},
+	"hebrew":         {0x0590, 0x05ff},
+	"currency":       {0x20a0, 0x20cf},
+	"letterlike":     {0x2100, 0x214f},
+	"arrows":         {0x2190, 0x21ff},
+	"misc_technical": {0x2300, 0x23ff},
+	"geometric":      {0x25a0, 0x25ff},
+	"misc_symbols":   {0x2600, 0x26ff},
+	"dingbats":       {0x2700, 0x27bf},
+	"cyrillic":       {0x0400, 0x04ff},
+	"tibetian":       {0x0f00, 0x0fff},
 
 	// Supplementary Multilingual Plane (10000-1ffff)
 	// https://en.wikipedia.org/wiki/Plane_(Unicode)#Supplementary_Multilingual_Plane
-	"aegean_nums":        UnicodeBlock{0x10100, 0x1013f},
-	"ancient_greek_nums": UnicodeBlock{0x10140, 0x1018f},
-	"phaistos_disc":      UnicodeBlock{0x101d0, 0x101ff},
-	"math_alnum":         UnicodeBlock{0x1d400, 0x1d7ff},
-	"emoji":              UnicodeBlock{0x1f300, 0x1f5ff},
-	"mahjong":            UnicodeBlock{0x1f000, 0x1f02f},
-	"dominos":            UnicodeBlock{0x1f030, 0x1f09f},
-	"playing_cards":      UnicodeBlock{0x1f0a0, 0x1f0ff},
-	"chess":              UnicodeBlock{0x1fa00, 0x1fa53},
-	"mayan_numerals":     UnicodeBlock{0x1d2e0, 0x1d2ff},
-	"gothic":             UnicodeBlock{0x10330, 0x1034f},
+	"aegean_nums":        {0x10100, 0x1013f},
+	"ancient_greek_nums": {0x10140, 0x1018f},
+	"phaistos_disc":      {0x101d0, 0x101ff},
+	"math_alnum":         {0x1d400, 0x1d7ff},
+	"emoji":              {0x1f300, 0x1f5ff},
+	"mahjong":            {0x1f000, 0x1f02f},
+	"dominos":            {0x1f030, 0x1f09f},
+	"playing_cards":      {0x1f0a0, 0x1f0ff},
+	"chess":              {0x1fa00, 0x1fa53},
+	"mayan_numerals":     {0x1d2e0, 0x1d2ff},
+	"gothic":             {0x10330, 0x1034f},
 }
 
 // RandomBlock returns a UnicodeBlock at random from a map[string]UnicodeBlock provided as argument.
@@ -58,6 +58,7 @@ func RandomBlock(m map[string]UnicodeBlock) (UnicodeBlock, error) {
 	return m[randKey], nil
 }
 
+// PrintBlocks prints known blocks.
 func PrintBlocks(all bool) {
 	// Create a slice of alphabetically-sorted keys.
 	var keys []string
