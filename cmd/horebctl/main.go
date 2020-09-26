@@ -2,80 +2,85 @@ package main
 
 import (
 	"context"
-	"flag"
 	"fmt"
 	"io"
-	"io/ioutil"
-	"log"
-	"os"
 
 	"github.com/qjcg/horeb/pkg/horeb"
 	pb "github.com/qjcg/horeb/proto"
 
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 )
 
-// Setup for global levelled logging.
-var (
-	info  = log.New(os.Stderr, "INFO ", log.LstdFlags)
-	debug = log.New(ioutil.Discard, "DEBUG ", log.LstdFlags)
+// Conf stores this application's configuration and dependenciees.
+type Conf struct {
+	logger *logrus.Logger
+	viper  *viper.Viper
+}
 
-	sep = flag.String("s", " ", "rune separator")
-)
+// NewConf initializes a new Conf value.
+func NewConf(v *viper.Viper) *Conf {
+	conf := Conf{
+		viper:  v,
+		logger: logrus.New(),
+	}
+
+	return &conf
+}
 
 func main() {
-	block := flag.String("b", "geometric", "unicode block")
-	debugFlag := flag.Bool("d", false, "debug logging")
-	num := flag.Int("n", 5, "number of runes to print")
-	version := flag.Bool("v", false, "print version")
-	flag.Parse()
+	pflag.StringP("block", "b", "geometric", "unicode block")
+	pflag.BoolP("debug", "d", false, "debug logging")
+	pflag.StringP("host", "i", "localhost", "host to listen on")
+	pflag.UintP("number", "n", 5, "number of runes to print")
+	pflag.UintP("port", "p", 9999, "TCP port to listen on")
+	pflag.StringP("separator", "s", " ", "rune separator")
+	pflag.BoolP("version", "v", false, "print version")
+	pflag.Parse()
 
-	conf := viper.New()
-	conf.SetDefault("host", "localhost")
-	conf.SetDefault("port", 9999)
+	conf := NewConf(viper.New())
 
-	conf.SetEnvPrefix("HOREBCTL")
-	conf.BindEnv("host")
-	conf.BindEnv("num")
-	conf.BindEnv("port")
+	conf.viper.SetEnvPrefix("HOREBCTL")
+	conf.viper.AutomaticEnv()
 
-	if *version {
-		fmt.Println(horeb.Version)
+	if conf.viper.GetBool("version") {
+		conf.logger.Infoln(horeb.Version)
 		return
 	}
 
-	if *debugFlag {
-		debug.SetOutput(os.Stderr)
+	if conf.viper.GetBool("debug") {
+		conf.logger.SetLevel(logrus.DebugLevel)
 	}
 
 	var opts []grpc.DialOption
 	opts = append(opts, grpc.WithInsecure())
-	conn, err := grpc.Dial(fmt.Sprintf("%s:%d", conf.GetString("host"), conf.GetInt("port")), opts...)
+	conn, err := grpc.Dial(fmt.Sprintf("%s:%d", conf.viper.GetString("host"), conf.viper.GetUint("port")), opts...)
 	if err != nil {
-		info.Fatalf("fail to dial: %v", err)
+		conf.logger.Fatalf("fail to dial: %v", err)
 	}
 	defer conn.Close()
 	client := pb.NewHorebClient(conn)
 
-	err = getRuneStream(
+	err = conf.getRuneStream(
 		client,
 		&pb.RuneRequest{
-			Num:   int32(*num),
-			Block: *block,
+			Num:   int32(conf.viper.GetInt("number")),
+			Block: conf.viper.GetString("block"),
 		},
 	)
 	if err != nil {
-		info.Fatal(err)
+		conf.logger.Fatalln(err)
 	}
 }
 
-func getRuneStream(client pb.HorebClient, rr *pb.RuneRequest) error {
-	debug.Printf("SENT: %#v\n", rr)
+func (conf *Conf) getRuneStream(client pb.HorebClient, rr *pb.RuneRequest) error {
+	conf.logger.Debugf("SENT: %#v\n", rr)
 
 	stream, err := client.GetStream(context.Background(), rr)
 	if err != nil {
-		info.Printf("%v.GetStream(_) = _, %v\n", client, err)
+		conf.logger.Infof("%v.GetStream(_) = _, %v\n", client, err)
 		return err
 	}
 
@@ -87,11 +92,11 @@ func getRuneStream(client pb.HorebClient, rr *pb.RuneRequest) error {
 			break
 		}
 		if err != nil {
-			info.Printf("stream receive error: %v\n", err)
+			conf.logger.Infof("stream receive error: %v\n", err)
 		}
-		fmt.Printf("%s%s", streamedRune.R, *sep)
+		fmt.Printf("%s%s", streamedRune.R, conf.viper.GetString("separator"))
 	}
-	debug.Printf("RECEIVED: %d %s", rr.Num, rr.Block)
+	conf.logger.Debugf("RECEIVED: %d %s", rr.Num, rr.Block)
 
 	return nil
 }
