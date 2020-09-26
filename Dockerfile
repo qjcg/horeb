@@ -1,12 +1,9 @@
-FROM golang:1.13-alpine AS builder
+FROM golang:1.15-alpine AS builder
 WORKDIR /go/src/app
 COPY [".", "."]
 ARG VERSION
 ARG VERSION_IMPORTPATH=github.com/qjcg/horeb/pkg/horeb.Version
-RUN apk add --no-cache upx
-RUN \
-	CGO_ENABLED=0 go install -ldflags "-s -w -X $VERSION_IMPORTPATH=$VERSION" ./... && \
-	upx /go/bin/*
+RUN CGO_ENABLED=0 go install -ldflags "-s -w -X $VERSION_IMPORTPATH=$VERSION" ./...
 
 ##########
 
@@ -24,6 +21,6 @@ USER 1337
 COPY --from=builder /go/bin/horebctl /usr/bin/horebctl
 COPY --from=builder /go/bin/horeb /usr/bin/horeb
 ENV HOREBCTL_HOST=horebd
-# Sleep for a day. Used to keep container alive, and ready to be attached to
+# Loop and sleep. Used to keep container alive, and ready to be attached to
 # with docker-compose.
-ENTRYPOINT ["/bin/sleep", "1d"]
+CMD ["sh", "-c", "'while horebctl; do sleep 1s; done'"]
