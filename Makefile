@@ -19,7 +19,7 @@ build_images: proto
 proto: proto/horeb.pb.go
 
 proto/horeb.pb.go: proto/horeb.proto
-	protoc -I proto/ proto/horeb.proto --go_out=plugins=grpc:proto
+	protoc -I proto/ proto/horeb.proto --go_opt=paths=source_relative --go_out=plugins=grpc:proto
 
 .PHONY: clean
 clean:
