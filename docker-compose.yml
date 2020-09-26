@@ -11,8 +11,9 @@ services:
       - 9999:9999
     environment:
       HOREBD_DEBUG: "false"
+      HOREBD_JSON: "true"
 
-  # The client tool.
+  # The client.
   horebctl:
     build:
       context: .
