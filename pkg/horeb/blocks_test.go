@@ -31,6 +31,8 @@ func BenchmarkRandomRune(b *testing.B) {
 
 func BenchmarkRandomBlock(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		RandomBlock(Blocks)
+		if _, err := RandomBlock(Blocks); err != nil {
+			b.Error(err)
+		}
 	}
 }
