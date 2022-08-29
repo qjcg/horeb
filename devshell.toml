@@ -1,0 +1,21 @@
+[devshell]
+name = "horeb"
+
+packages = [
+  "go_1_19",
+  "protobuf",
+  "protoc-gen-go",
+  "protoc-gen-go-grpc",
+]
+
+[[commands]]
+help = "compile proto"
+name = "proto-build"
+command = "protoc -I ./proto/ ./proto/horeb.proto --go_opt=paths=source_relative --go_out=./proto --go-grpc_opt=paths=source_relative --go-grpc_out=./proto"
+category = "build"
+
+[[commands]]
+help = "remove generated protobuf files"
+name = "proto-clean"
+command = "rm ./proto/*.go"
+category = "build"

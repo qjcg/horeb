@@ -2,12 +2,18 @@
   description = "A Nix flake for horeb.";
 
   inputs = {
+    devshell.url = "github:numtide/devshell";
     flake-utils.url = "github:numtide/flake-utils";
-    pkgs.url = "github:nixos/nixpkgs/nixos-22.05";
+    pkgs.url = "github:nixos/nixpkgs/nixos-unstable";
   };
 
   outputs = {self, ...} @ inputs:
-    inputs.flake-utils.lib.eachDefaultSystem (system: {
+    inputs.flake-utils.lib.eachDefaultSystem (system: let
+      pkgs = import inputs.pkgs {
+        inherit system;
+        overlays = [inputs.devshell.overlay];
+      };
+    in {
       apps = with self.packages.${system}; {
         default = self.apps.${system}.horeb;
 
@@ -21,6 +27,10 @@
         build = self.packages.${system}.default;
       };
 
+      devShells = {
+        default = pkgs.devshell.fromTOML ./devshell.toml;
+      };
+
       overlays = {
         default = final: prev: {
           horeb = self.packages.${prev.system}.default;
@@ -31,8 +41,7 @@
         inherit (pkgs) buildGo118Module protobuf protoc-gen-go protoc-gen-go-grpc;
         inherit (pkgs.lib) fakeSha256 licenses;
 
-        pkgs = import inputs.pkgs {inherit system;};
-        version = "0.12.1";
+        version = "0.14.0";
       in {
         default = buildGo118Module {
           inherit version;
