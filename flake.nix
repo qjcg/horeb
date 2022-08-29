@@ -28,7 +28,7 @@
       };
 
       packages = let
-        inherit (pkgs) buildGo118Module;
+        inherit (pkgs) buildGo118Module protobuf protoc-gen-go protoc-gen-go-grpc;
         inherit (pkgs.lib) fakeSha256 licenses;
 
         pkgs = import inputs.pkgs {inherit system;};
@@ -41,6 +41,13 @@
           src = self;
           packages = ["cmd/..."];
           vendorSha256 = "sha256-wvmz1jzRxPCldS/1VHdPoT4hNSSoPTEEYezjDCjRqMw=";
+
+          nativeBuildInputs = [protobuf protoc-gen-go protoc-gen-go-grpc];
+
+          # See https://grpc.io/docs/languages/go/quickstart/#regenerate-grpc-code
+          preBuild = ''
+            ${protobuf}/bin/protoc -I $src/proto/ $src/proto/horeb.proto --go_opt=paths=source_relative --go_out=. --go-grpc_opt=paths=source_relative --go-grpc_out=.
+          '';
 
           ldflags = [
             "-s"
