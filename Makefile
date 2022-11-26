@@ -8,9 +8,20 @@ img_versioned := $(img):$(version)
 .PHONY: all
 all: install
 
+.PHONY: build
+build:
+	go build -ldflags '-s -w -X $(version_importpath)=$(version)' -o ./ ./...
+
 .PHONY: install
 install:
 	go install -ldflags '-s -w -X $(version_importpath)=$(version)' ./...
+
+.PHONY: clean
+clean:
+	rm -rf horeb
+
+
+# Docker
 
 .PHONY: docker-build
 docker-build:
