@@ -20,6 +20,14 @@ install:
 clean:
 	rm -rf horeb
 
+.PHONY: test
+test:
+	go test -cover ./...
+
+.PHONY: test-integration
+test-integration:
+	go test -cover -tags integration ./...
+
 
 # Docker
 
