@@ -10,11 +10,13 @@ all: install
 
 .PHONY: build
 build:
-	go build -ldflags '-s -w -X $(version_importpath)=$(version)' -o ./ ./...
+	go build -ldflags '-s -w -X $(version_importpath)=$(version)' ./cmd/horeb
+	upx horeb
 
 .PHONY: install
 install:
-	go install -ldflags '-s -w -X $(version_importpath)=$(version)' ./...
+	go install -ldflags '-s -w -X $(version_importpath)=$(version)' ./cmd/horeb
+	upx $(GOBIN)/horeb
 
 .PHONY: clean
 clean:
