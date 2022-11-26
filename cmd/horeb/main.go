@@ -1,13 +1,15 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
-	"log"
 	"math/rand"
+	"os"
 	"time"
 
 	"github.com/qjcg/horeb/internal/horeb"
+	"golang.org/x/exp/slog"
 )
 
 const (
@@ -60,7 +62,8 @@ func main() {
 	case len(blocks) == 1:
 		b, ok := horeb.Blocks[blocks[0]]
 		if !ok {
-			log.Fatalf("Unknown block: %s\n", blocks[0])
+			err := errors.New("unknown block")
+			slog.Error("Unknown block", err, "block", blocks[0])
 		}
 
 		if *stream {
@@ -76,7 +79,7 @@ func main() {
 		for _, b := range blocks {
 			val, ok := horeb.Blocks[b]
 			if !ok {
-				log.Printf("Unknown block: %s\n", b)
+				slog.Warn("Unknown block", "block", b)
 				continue
 			}
 			bm[b] = val
@@ -89,7 +92,8 @@ func main() {
 
 					block, err := horeb.RandomBlock(bm)
 					if err != nil {
-						log.Fatal(err)
+						slog.Error("Error getting random block", err)
+						os.Exit(1)
 					}
 					fmt.Printf("%c%s", block.RandomRune(), *ofs)
 				}
@@ -97,7 +101,8 @@ func main() {
 				for i := 0; i < *nchars; i++ {
 					block, err := horeb.RandomBlock(bm)
 					if err != nil {
-						log.Fatal(err)
+						slog.Error("Error getting random block", err)
+						os.Exit(1)
 					}
 					fmt.Printf("%c%s", block.RandomRune(), *ofs)
 				}
