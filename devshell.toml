@@ -3,3 +3,6 @@ name = "horeb"
 
 [[commands]]
 package = "go_1_19"
+
+[[commands]]
+package = "gnumake"
