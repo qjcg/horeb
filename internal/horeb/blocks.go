@@ -3,6 +3,7 @@ package horeb
 import (
 	"errors"
 	"fmt"
+	"io"
 	"math/rand"
 	"sort"
 	"strconv"
@@ -68,21 +69,21 @@ func getSortedKeys() []string {
 	return keys
 }
 
-// PrintBlocks prints known blocks.
-func PrintBlocks() {
+// ListBlocks prints known blocks.
+func ListBlocks(w io.Writer) {
 	for _, k := range getSortedKeys() {
 		b := Blocks[k]
-		fmt.Printf("%5x %5x  %s\n", b.Start, b.End, k)
+		fmt.Fprintf(w, "%5x %5x  %s\n", b.Start, b.End, k)
 	}
 }
 
-// PrintAllBlocks prints all known blocks.
-func PrintAllBlocks() {
+// DumpBlocks prints all known blocks.
+func DumpBlocks(w io.Writer) {
 	for _, k := range getSortedKeys() {
 		b := Blocks[k]
-		fmt.Printf("%5x %5x  %s\n", b.Start, b.End, k)
-		b.Print()
-		fmt.Println()
+		fmt.Fprintf(w, "%5x %5x  %s\n", b.Start, b.End, k)
+		b.Print(w)
+		fmt.Fprintln(w)
 	}
 }
 
@@ -92,7 +93,7 @@ func (b UnicodeBlock) RandomRune() rune {
 }
 
 // Print prints all printable runes in UnicodeBlock.
-func (b UnicodeBlock) Print() {
+func (b UnicodeBlock) Print(w io.Writer) {
 	for i := b.Start; i <= b.End; i++ {
 
 		// Only print printable runes.
@@ -100,15 +101,15 @@ func (b UnicodeBlock) Print() {
 			continue
 		}
 
-		fmt.Printf("%c ", i)
+		fmt.Fprintf(w, "%c ", i)
 	}
-	fmt.Println()
+	fmt.Fprintln(w)
 }
 
 // PrintRandom prints n random runes from UnicodeBlock.
-func (b UnicodeBlock) PrintRandom(n int, ofs string) {
+func (b UnicodeBlock) PrintRandom(w io.Writer, n int, ofs string) {
 	for i := 0; i < n; i++ {
-		fmt.Printf("%c%s", b.RandomRune(), ofs)
+		fmt.Fprintf(w, "%c%s", b.RandomRune(), ofs)
 	}
-	fmt.Println()
+	fmt.Fprintln(w)
 }

@@ -55,10 +55,10 @@ func main() {
 	}
 
 	switch {
-	case *list:
-		horeb.PrintBlocks()
-	case *dump:
-		horeb.PrintAllBlocks()
+	case *listFlag:
+		horeb.ListBlocks(os.Stdout)
+	case *dumpFlag:
+		horeb.DumpBlocks(os.Stdout)
 	case len(blocks) == 1:
 		b, ok := horeb.Blocks[blocks[0]]
 		if !ok {
@@ -72,7 +72,7 @@ func main() {
 				fmt.Printf("%c%s", b.RandomRune(), *ofs)
 			}
 		} else {
-			b.PrintRandom(*nchars, *ofs)
+			b.PrintRandom(os.Stdout, *nCharsFlag, *ofsFlag)
 		}
 	case len(blocks) > 1:
 		bm := map[string]horeb.UnicodeBlock{}
