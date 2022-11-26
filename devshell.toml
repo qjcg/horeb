@@ -1,6 +1,5 @@
 [devshell]
 name = "horeb"
 
-packages = [
-  "go_1_19",
-]
+[[commands]]
+package = "go_1_19"
