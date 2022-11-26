@@ -5,4 +5,5 @@ name = "horeb"
 package = "go_1_19"
 
 [[commands]]
+name = "make"
 package = "gnumake"
