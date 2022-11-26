@@ -4,11 +4,11 @@
   inputs = {
     devshell.url = "github:numtide/devshell";
     flake-utils.url = "github:numtide/flake-utils";
-    pkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    pkgs.url = "github:nixos/nixpkgs/release-22.05";
   };
 
   outputs = {self, ...} @ inputs:
-    inputs.flake-utils.lib.eachDefaultSystem (system: let
+    (inputs.flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import inputs.pkgs {
         inherit system;
         overlays = [inputs.devshell.overlay];
@@ -31,32 +31,19 @@
         default = pkgs.devshell.fromTOML ./devshell.toml;
       };
 
-      overlays = {
-        default = final: prev: {
-          horeb = self.packages.${prev.system}.default;
-        };
-      };
-
       packages = let
-        inherit (pkgs) buildGo118Module protobuf protoc-gen-go protoc-gen-go-grpc;
+        inherit (pkgs) buildGoModule;
         inherit (pkgs.lib) fakeSha256 licenses;
 
+        pname = "horeb";
         version = "0.14.0";
       in {
-        default = buildGo118Module {
-          inherit version;
+        default = buildGoModule {
+          inherit pname version;
 
-          pname = "horeb";
           src = self;
           packages = ["cmd/..."];
           vendorSha256 = "sha256-wvmz1jzRxPCldS/1VHdPoT4hNSSoPTEEYezjDCjRqMw=";
-
-          nativeBuildInputs = [protobuf protoc-gen-go protoc-gen-go-grpc];
-
-          # See https://grpc.io/docs/languages/go/quickstart/#regenerate-grpc-code
-          preBuild = ''
-            ${protobuf}/bin/protoc -I $src/proto/ $src/proto/horeb.proto --go_opt=paths=source_relative --go_out=. --go-grpc_opt=paths=source_relative --go-grpc_out=.
-          '';
 
           ldflags = [
             "-s"
@@ -71,5 +58,14 @@
           };
         };
       };
-    });
+    }))
+    # Avoids nix flake check error: overlay does not take an argument named 'final'
+    # See e.g. https://github.com/ivanovs-4/haskell-flake-utils/issues/2
+    // {
+      overlays = {
+        default = final: prev: {
+          horeb = self.packages.${prev.system}.default;
+        };
+      };
+    };
 }
