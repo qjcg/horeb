@@ -7,7 +7,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/qjcg/horeb/pkg/horeb"
+	"github.com/qjcg/horeb/internal/horeb"
 )
 
 const (

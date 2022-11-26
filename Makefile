@@ -1,5 +1,5 @@
 version := $(shell git describe --tags)
-version_importpath := github.com/qjcg/horeb/pkg/horeb.Version
+version_importpath := github.com/qjcg/horeb/internal/horeb.Version
 img := horeb
 img_latest := $(img):latest
 img_versioned := $(img):$(version)
