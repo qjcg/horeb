@@ -1,6 +1,6 @@
 FROM golang:1.19-alpine AS builder
 WORKDIR /go/src/app
-COPY [".", "."]
+COPY . .
 ARG VERSION
 ARG VERSION_IMPORTPATH=github.com/qjcg/horeb/pkg/horeb.Version
 RUN CGO_ENABLED=0 go install -ldflags "-s -w -X $VERSION_IMPORTPATH=$VERSION" ./...
