@@ -26,8 +26,8 @@ clean:
 test:
 	go test -cover ./...
 
-.PHONY: testfull
-testfull:
+.PHONY: testall
+testall:
 	go test -cover -tags integration -v ./...
 
 
