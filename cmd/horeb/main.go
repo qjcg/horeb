@@ -56,9 +56,9 @@ func main() {
 
 	switch {
 	case *list:
-		horeb.PrintBlocks(false)
+		horeb.PrintBlocks()
 	case *dump:
-		horeb.PrintBlocks(true)
+		horeb.PrintAllBlocks()
 	case len(blocks) == 1:
 		b, ok := horeb.Blocks[blocks[0]]
 		if !ok {

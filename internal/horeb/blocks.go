@@ -6,6 +6,8 @@ import (
 	"math/rand"
 	"sort"
 	"strconv"
+
+	"github.com/samber/lo"
 )
 
 // UnicodeBlock values represent a contiguous range of Unicode codepoints.
@@ -50,30 +52,37 @@ func RandomBlock(m map[string]UnicodeBlock) (UnicodeBlock, error) {
 	if nkeys < 1 {
 		return UnicodeBlock{}, errors.New("Empty map provided")
 	}
-	var keys []string
-	for k := range m {
-		keys = append(keys, k)
-	}
-	randKey := keys[rand.Intn(nkeys)]
+	keys := lo.Keys[string, UnicodeBlock](m)
+	randKey := lo.Sample(keys)
 	return m[randKey], nil
 }
 
-// PrintBlocks prints known blocks.
-func PrintBlocks(all bool) {
-	// Create a slice of alphabetically-sorted keys.
+// getSortedKeys returns a slice of alphabetically-sorted keys.
+func getSortedKeys() []string {
 	var keys []string
 	for k := range Blocks {
 		keys = append(keys, k)
 	}
 	sort.Strings(keys)
 
-	for _, k := range keys {
+	return keys
+}
+
+// PrintBlocks prints known blocks.
+func PrintBlocks() {
+	for _, k := range getSortedKeys() {
 		b := Blocks[k]
 		fmt.Printf("%5x %5x  %s\n", b.Start, b.End, k)
-		if all {
-			b.Print()
-			fmt.Println()
-		}
+	}
+}
+
+// PrintAllBlocks prints all known blocks.
+func PrintAllBlocks() {
+	for _, k := range getSortedKeys() {
+		b := Blocks[k]
+		fmt.Printf("%5x %5x  %s\n", b.Start, b.End, k)
+		b.Print()
+		fmt.Println()
 	}
 }
 
