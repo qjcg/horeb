@@ -51,7 +51,7 @@
           ldflags = [
             "-s"
             "-w"
-            "-X github.com/qjcg/horeb/pkg/horeb.Version=${version}"
+            "-X main.Version=${version}"
           ];
 
           meta = {
