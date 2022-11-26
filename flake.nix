@@ -46,7 +46,7 @@
 
           src = self;
           packages = ["cmd/..."];
-          vendorSha256 = "sha256-wvmz1jzRxPCldS/1VHdPoT4hNSSoPTEEYezjDCjRqMw=";
+          vendorSha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
 
           ldflags = [
             "-s"
