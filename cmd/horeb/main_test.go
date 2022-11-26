@@ -1,3 +1,4 @@
+//go:build integration
 // +build integration
 
 package main
@@ -6,51 +7,67 @@ package main
 // go test -v -tags integration
 
 import (
+	"os"
 	"os/exec"
+	"path"
 	"testing"
 )
 
 const cmdName = "horeb"
 
-func TestNoArgs(t *testing.T) {
-	out, err := exec.Command(cmdName).CombinedOutput()
+func TestBuildAndRunBinary(t *testing.T) {
+	dir, err := os.MkdirTemp("", cmdName)
 	if err != nil {
-		t.Fatalf("%s\n%s\n", err, out)
-	}
-}
-
-func TestBadArg(t *testing.T) {
-	err := exec.Command(cmdName, "NOT_A_BLOCK").Run()
-	if _, ok := err.(*exec.ExitError); !ok {
 		t.Fatal(err)
 	}
-}
+	defer os.RemoveAll(dir)
 
-func TestGoodArg(t *testing.T) {
-	tests := []string{
-		"geometric",
-		"mahjong",
-		"emoji",
+	binPath := path.Join(dir, cmdName)
+	err = exec.Command("go", "build", "-o", binPath).Run()
+	if err != nil {
+		t.Fatal(err)
 	}
-	for _, block := range tests {
-		out, err := exec.Command(cmdName, block).CombinedOutput()
-		if err != nil {
-			t.Fatalf("%s\n%s\n", err, out)
-		}
-	}
-}
 
-func TestMultiGoodArgs(t *testing.T) {
-	tests := []struct {
-		blocks []string
-	}{
-		{[]string{"geometric", "dominos"}},
-		{[]string{"emoji", "mahjong"}},
-	}
-	for _, test := range tests {
-		out, err := exec.Command(cmdName, test.blocks...).CombinedOutput()
+	t.Run("NoArgs", func(t *testing.T) {
+		err := exec.Command(binPath).Run()
 		if err != nil {
-			t.Fatalf("%s\n%s\n", err, out)
+			t.Fatal(err)
 		}
-	}
+	})
+
+	t.Run("BadArg", func(t *testing.T) {
+		err := exec.Command(binPath, "NOT_A_BLOCK").Run()
+		if _, ok := err.(*exec.ExitError); !ok {
+			t.Fatal(err)
+		}
+	})
+
+	t.Run("GoodArg", func(t *testing.T) {
+		tests := []string{
+			"geometric",
+			"mahjong",
+			"emoji",
+		}
+		for _, block := range tests {
+			out, err := exec.Command(binPath, block).CombinedOutput()
+			if err != nil {
+				t.Fatalf("%s\n%s\n", err, out)
+			}
+		}
+	})
+
+	t.Run("MultiGoodArgs", func(t *testing.T) {
+		tests := []struct {
+			blocks []string
+		}{
+			{[]string{"geometric", "dominos"}},
+			{[]string{"emoji", "mahjong"}},
+		}
+		for _, test := range tests {
+			out, err := exec.Command(binPath, test.blocks...).CombinedOutput()
+			if err != nil {
+				t.Fatalf("%s\n%s\n", err, out)
+			}
+		}
+	})
 }
