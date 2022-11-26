@@ -2,7 +2,10 @@
   description = "A Nix flake for horeb.";
 
   inputs = {
-    devshell.url = "github:numtide/devshell";
+    devshell = {
+      url = "github:numtide/devshell";
+      inputs.nixpkgs.follows = "pkgs";
+    };
     flake-utils.url = "github:numtide/flake-utils";
     pkgs.url = "github:nixos/nixpkgs/release-22.05";
   };
