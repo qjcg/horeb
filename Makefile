@@ -26,9 +26,9 @@ clean:
 test:
 	go test -cover ./...
 
-.PHONY: test-integration
-test-integration:
-	go test -cover -tags integration ./...
+.PHONY: testfull
+testfull:
+	go test -cover -tags integration -v ./...
 
 
 # Docker
