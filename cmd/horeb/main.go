@@ -27,16 +27,16 @@ func main() {
 
 	flag.Usage = usage
 
-	dump := flag.Bool("d", false, "dump all blocks")
-	list := flag.Bool("l", false, "list all blocks")
-	nchars := flag.Int("n", 30, "number of runes to generate")
-	ofs := flag.String("o", " ", "output field separator")
-	stream := flag.Bool("s", false, "generate an endless stream of runes")
-	streamDelay := flag.Duration("D", time.Millisecond*30, "stream delay")
-	version := flag.Bool("v", false, "print version")
+	dumpFlag := flag.Bool("d", false, "dump all blocks")
+	listFlag := flag.Bool("l", false, "list all blocks")
+	nCharsFlag := flag.Int("n", 30, "number of runes to generate")
+	ofsFlag := flag.String("o", " ", "output field separator")
+	streamFlag := flag.Bool("s", false, "generate an endless stream of runes")
+	streamDelayFlag := flag.Duration("D", time.Millisecond*30, "stream delay")
+	versionFlag := flag.Bool("v", false, "print version")
 	flag.Parse()
 
-	if *version {
+	if *versionFlag {
 		fmt.Println(Version)
 		return
 	}
@@ -66,10 +66,10 @@ func main() {
 			slog.Error("Unknown block", err, "block", blocks[0])
 		}
 
-		if *stream {
-			ticker := time.NewTicker(*streamDelay)
+		if *streamFlag {
+			ticker := time.NewTicker(*streamDelayFlag)
 			for range ticker.C {
-				fmt.Printf("%c%s", b.RandomRune(), *ofs)
+				fmt.Printf("%c%s", b.RandomRune(), *ofsFlag)
 			}
 		} else {
 			b.PrintRandom(os.Stdout, *nCharsFlag, *ofsFlag)
@@ -86,8 +86,8 @@ func main() {
 		}
 		if len(bm) > 0 {
 			defer fmt.Println()
-			if *stream {
-				ticker := time.NewTicker(*streamDelay)
+			if *streamFlag {
+				ticker := time.NewTicker(*streamDelayFlag)
 				for range ticker.C {
 
 					block, err := horeb.RandomBlock(bm)
@@ -95,16 +95,16 @@ func main() {
 						slog.Error("Error getting random block", err)
 						os.Exit(1)
 					}
-					fmt.Printf("%c%s", block.RandomRune(), *ofs)
+					fmt.Printf("%c%s", block.RandomRune(), *ofsFlag)
 				}
 			} else {
-				for i := 0; i < *nchars; i++ {
+				for i := 0; i < *nCharsFlag; i++ {
 					block, err := horeb.RandomBlock(bm)
 					if err != nil {
 						slog.Error("Error getting random block", err)
 						os.Exit(1)
 					}
-					fmt.Printf("%c%s", block.RandomRune(), *ofs)
+					fmt.Printf("%c%s", block.RandomRune(), *ofsFlag)
 				}
 			}
 		}
