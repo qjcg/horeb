@@ -20,7 +20,7 @@ install:
 
 .PHONY: clean
 clean:
-	rm -rf horeb
+	rm -rf horeb coverprofile.out
 
 .PHONY: test
 test:
