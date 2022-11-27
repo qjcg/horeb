@@ -35,11 +35,14 @@ clean:
 	rm -rf horeb coverprofile.out dist
 
 .PHONY: test
-test:
+test: test-integration
+
+.PHONY: test-unit
+test-unit:
 	go test -cover ./...
 
-.PHONY: testall
-testall:
+.PHONY: test-integration
+test-integration:
 	go test -cover -tags integration -v ./...
 
 .PHONY: cover
