@@ -1,4 +1,4 @@
-# Horeb [![Build Status][build-logo]][horeb-travis]
+# Horeb ![Build Status](https://img.shields.io/github/workflow/status/qjcg/horeb/Test%20and%20Lint/main)
 
 ![Mt. Horeb][mt-horeb]
 
