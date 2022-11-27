@@ -1,0 +1,4 @@
+# Bad block argument
+
+! exec horebMain NOT_A_BLOCK
+stderr 'unknown'
