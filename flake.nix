@@ -35,18 +35,18 @@
       };
 
       packages = let
-        inherit (pkgs) buildGoModule;
+        inherit (pkgs) buildGo119Module;
         inherit (pkgs.lib) fakeSha256 licenses;
 
         pname = "horeb";
-        version = "0.14.0";
+        version = "0.15.0";
       in {
-        default = buildGoModule {
+        default = buildGo119Module {
           inherit pname version;
 
           src = self;
           packages = ["cmd/..."];
-          vendorSha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+          vendorSha256 = "sha256-18QLdD0FvUeUY7cZEvYEAts0pgwPS/ViqSjczksA81c=";
 
           ldflags = [
             "-s"
