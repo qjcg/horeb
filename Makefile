@@ -9,9 +9,17 @@ img_versioned := $(img):$(version)
 .PHONY: all
 all: install
 
+.PHONY: build
+build:
+	goreleaser build --rm-dist
+
 .PHONY: build-snapshot
 build-snapshot:
 	goreleaser build --rm-dist --snapshot
+
+.PHONY: release
+release:
+	goreleaser release --rm-dist
 
 .PHONY: release-snapshot
 release-snapshot:
