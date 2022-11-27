@@ -9,8 +9,7 @@ release:
   draft: true
 
 builds:
-  - id: horeb
-    main: ./cmd/horeb
+  - main: ./cmd/horeb
     ldflags:
       - -s -w -X main.Version={{.Version}}
     env:
@@ -47,8 +46,7 @@ nfpms:
       - archlinux
 
 dockers:
-  - id: horeb
-    image_templates:
+  - image_templates:
       - qjcg/horeb:{{ .Tag }}
       - qjcg/horeb:latest
 
