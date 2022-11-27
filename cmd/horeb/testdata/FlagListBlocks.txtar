@@ -1,0 +1,25 @@
+exec horebMain -l
+cmp stdout horeb_list_blocks.txt
+
+-- horeb_list_blocks.txt --
+10100 1013f  aegean_nums
+10140 1018f  ancient_greek_nums
+ 2190  21ff  arrows
+1fa00 1fa53  chess
+ 20a0  20cf  currency
+  400   4ff  cyrillic
+ 2700  27bf  dingbats
+1f030 1f09f  dominos
+1f300 1f5ff  emoji
+ 25a0  25ff  geometric
+10330 1034f  gothic
+  590   5ff  hebrew
+ 2100  214f  letterlike
+1f000 1f02f  mahjong
+1d400 1d7ff  math_alnum
+1d2e0 1d2ff  mayan_numerals
+ 2600  26ff  misc_symbols
+ 2300  23ff  misc_technical
+101d0 101ff  phaistos_disc
+1f0a0 1f0ff  playing_cards
+  f00   fff  tibetian
