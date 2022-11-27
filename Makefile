@@ -41,7 +41,6 @@ cover:
 	go tool cover -html coverprofile.out
 
 .PHONY: tag
-tag: t
 tag:
 	git tag -am "$(t)" $(t)
 	git push --tags
