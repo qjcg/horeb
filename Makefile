@@ -27,7 +27,7 @@ release-snapshot:
 
 .PHONY: install
 install:
-	go install $(ldflags) ./cmd/horeb
+	GOAMD64=v3 go install $(ldflags) ./cmd/horeb
 	upx $(GOBIN)/horeb
 
 .PHONY: clean
