@@ -1,5 +1,6 @@
 version := $(shell git describe --tags)
 version_importpath := main.Version
+ldflags := -ldflags '-s -w -X $(version_importpath)=$(version)'
 img := horeb
 img_latest := $(img):latest
 img_versioned := $(img):$(version)
@@ -10,12 +11,12 @@ all: install
 
 .PHONY: build
 build:
-	go build -ldflags '-s -w -X $(version_importpath)=$(version)' ./cmd/horeb
+	go build $(ldflags) ./cmd/horeb
 	upx horeb
 
 .PHONY: install
 install:
-	go install -ldflags '-s -w -X $(version_importpath)=$(version)' ./cmd/horeb
+	go install $(ldflags) ./cmd/horeb
 	upx $(GOBIN)/horeb
 
 .PHONY: clean
