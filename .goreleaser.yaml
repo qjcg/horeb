@@ -48,8 +48,6 @@ nfpms:
 dockers:
   - image_templates:
       - qjcg/horeb:{{ .Tag }}
-      #- qjcg/horeb:v{{ .Major }}
-      #- qjcg/horeb:v{{ .Major }}.{{ .Minor }}
       - qjcg/horeb:latest
 
 sboms:
