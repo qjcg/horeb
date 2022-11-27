@@ -4,3 +4,4 @@ debug
 *.pkg.tar.xz
 build/
 result
+coverprofile.out

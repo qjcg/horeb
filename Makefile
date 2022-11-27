@@ -30,6 +30,11 @@ test:
 testall:
 	go test -cover -tags integration -v ./...
 
+.PHONY: cover
+cover:
+	go test -tags integration -coverprofile coverprofile.out ./...
+	go tool cover -func coverprofile.out
+	go tool cover -html coverprofile.out
 
 # Docker
 
