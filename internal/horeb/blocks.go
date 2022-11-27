@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"sort"
 	"strconv"
+	"time"
 
 	"github.com/samber/lo"
 )
@@ -77,8 +78,8 @@ func ListBlocks(w io.Writer) {
 	}
 }
 
-// DumpBlocks prints all known blocks.
-func DumpBlocks(w io.Writer) {
+// ListBlocksWithContents prints all known blocks and their contents.
+func ListBlocksWithContents(w io.Writer) {
 	for _, k := range getSortedKeys() {
 		b := Blocks[k]
 		fmt.Fprintf(w, "%5x %5x  %s\n", b.Start, b.End, k)
@@ -96,7 +97,7 @@ func (b UnicodeBlock) RandomRune() rune {
 func (b UnicodeBlock) Print(w io.Writer) {
 	for i := b.Start; i <= b.End; i++ {
 
-		// Only print printable runes.
+		// Skip non-printable runes.
 		if !strconv.IsPrint(i) {
 			continue
 		}
@@ -112,4 +113,11 @@ func (b UnicodeBlock) PrintRandom(w io.Writer, n int, ofs string) {
 		fmt.Fprintf(w, "%c%s", b.RandomRune(), ofs)
 	}
 	fmt.Fprintln(w)
+}
+
+// StreamRandom continously writes random runes from UnicodeBlock.
+func (b UnicodeBlock) StreamRandom(w io.Writer, interval time.Duration, ofs string) {
+	for range time.NewTicker(interval).C {
+		fmt.Fprintf(w, "%c%s", b.RandomRune(), ofs)
+	}
 }
