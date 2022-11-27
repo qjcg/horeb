@@ -1,7 +1,7 @@
 exec horebMain -L
-cmp stdout horeb_list_blocks_with_contents.txt
+cmp stdout golden.txt
 
--- horeb_list_blocks_with_contents.txt --
+-- golden.txt --
 10100 1013f  aegean_nums
 𐄀 𐄁 𐄂 𐄇 𐄈 𐄉 𐄊 𐄋 𐄌 𐄍 𐄎 𐄏 𐄐 𐄑 𐄒 𐄓 𐄔 𐄕 𐄖 𐄗 𐄘 𐄙 𐄚 𐄛 𐄜 𐄝 𐄞 𐄟 𐄠 𐄡 𐄢 𐄣 𐄤 𐄥 𐄦 𐄧 𐄨 𐄩 𐄪 𐄫 𐄬 𐄭 𐄮 𐄯 𐄰 𐄱 𐄲 𐄳 𐄷 𐄸 𐄹 𐄺 𐄻 𐄼 𐄽 𐄾 𐄿 
 

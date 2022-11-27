@@ -1,7 +1,7 @@
 exec horebMain -l
-cmp stdout horeb_list_blocks.txt
+cmp stdout golden.txt
 
--- horeb_list_blocks.txt --
+-- golden.txt --
 10100 1013f  aegean_nums
 10140 1018f  ancient_greek_nums
  2190  21ff  arrows
