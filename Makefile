@@ -41,9 +41,9 @@ cover:
 	go tool cover -html coverprofile.out
 
 .PHONY: tag
-tag: tag_next := $(shell svu next)
+tag: t
 tag:
-	git tag -am "$(tag_next)" $(tag_next)
+	git tag -am "$(t)" $(t)
 	git push --tags
 
 
