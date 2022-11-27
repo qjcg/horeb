@@ -9,10 +9,13 @@ img_versioned := $(img):$(version)
 .PHONY: all
 all: install
 
-.PHONY: build
-build:
-	go build $(ldflags) ./cmd/horeb
-	upx horeb
+.PHONY: build-snapshot
+build-snapshot:
+	goreleaser build --rm-dist --snapshot
+
+.PHONY: release-snapshot
+release-snapshot:
+	goreleaser release --rm-dist --snapshot
 
 .PHONY: install
 install:
@@ -21,7 +24,7 @@ install:
 
 .PHONY: clean
 clean:
-	rm -rf horeb coverprofile.out
+	rm -rf horeb coverprofile.out dist
 
 .PHONY: test
 test:
@@ -36,6 +39,13 @@ cover:
 	go test -tags integration -coverprofile coverprofile.out ./...
 	go tool cover -func coverprofile.out
 	go tool cover -html coverprofile.out
+
+.PHONY: tag
+tag: tag_next := $(shell svu next)
+tag:
+	git tag -am "$(tag_next)" $(tag_next)
+	git push --tags
+
 
 # Docker
 
