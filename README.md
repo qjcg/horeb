@@ -14,10 +14,8 @@ One source of inspiration for this tool is the [TempleOS](https://templeos.org)
 ## Install
 
 ```sh
-go get -u github.com/qjcg/horeb
+go install github.com/qjcg/horeb@latest
 ```
-
-Alternatively, you can download the [latest binary release here].
 
 
 ## Usage
@@ -50,7 +48,7 @@ $ horeb -l
 Dump all characters from all blocks `horeb` knows about:
 
 ```sh
-$ horeb -d
+$ horeb -L
 10100 1013f  aegean_nums
 𐄀 𐄁 𐄂 𐄇 𐄈 𐄉 𐄊 𐄋 𐄌 𐄍 𐄎 𐄏 𐄐 𐄑 𐄒 𐄓 𐄔 𐄕 𐄖 𐄗 𐄘 𐄙 𐄚 𐄛 𐄜 𐄝 𐄞 𐄟 𐄠 𐄡 𐄢 𐄣 𐄤 𐄥 𐄦 𐄧 𐄨 𐄩 𐄪 𐄫
 𐄬 𐄭 𐄮 𐄯 𐄰 𐄱 𐄲 𐄳 𐄷 𐄸 𐄹 𐄺 𐄻 𐄼 𐄽 𐄾 𐄿
@@ -71,13 +69,13 @@ $ horeb -d
 Run main unit test suite:
 
 ```
-go test ./...
+make test
 ```
 
-Run unit and integration tests (after a successful "go install"):
+Run unit and integration tests:
 
 ```sh
-go test -tags integration ./...
+make testall
 ```
 
 
