@@ -11,7 +11,7 @@ release:
 builds:
   - main: ./cmd/horeb
     ldflags:
-      - -s -w -X main.Version={{.Version}}
+      - -s -w -X main.Version={{ .Version }}
     env:
       - CGO_ENABLED=0
     # targets:
@@ -20,6 +20,7 @@ builds:
       - linux
       - darwin
     goamd64:
+      - v1
       - v3
     hooks:
       post:
@@ -47,7 +48,7 @@ nfpms:
 
 dockers:
   - image_templates:
-      - qjcg/horeb:{{ .Tag }}
+      - qjcg/horeb:{{ .Version }}
       - qjcg/horeb:latest
 
 sboms:
