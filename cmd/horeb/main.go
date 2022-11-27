@@ -4,11 +4,13 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"io"
 	"math/rand"
 	"os"
 	"time"
 
 	"github.com/qjcg/horeb/internal/horeb"
+	"github.com/samber/mo"
 	"golang.org/x/exp/slog"
 )
 
@@ -16,67 +18,106 @@ const (
 	description = "horeb: Speaking in tongues via stdout"
 )
 
-func usage() {
-	fmt.Fprintf(flag.CommandLine.Output(), "\n%s\n\n", description)
-	flag.PrintDefaults()
-	fmt.Fprintln(flag.CommandLine.Output())
+// config contains our application config.
+type config struct {
+	debug                  *bool
+	listBlocks             *bool
+	listBlocksWithContents *bool
+	nChars                 *int
+	ofs                    *string
+	stream                 *bool
+	streamDelay            *time.Duration
+	version                *bool
+	blocks                 []string
+}
+
+func getConf(w io.Writer, args []string) mo.Result[*config] {
+	var err error
+
+	fs := flag.NewFlagSet("horeb", flag.ExitOnError)
+
+	fs.Usage = func() {
+		fmt.Fprintf(w, "\n%s\n\n", description)
+		fs.PrintDefaults()
+		fmt.Fprintln(w)
+	}
+
+	conf := config{
+		debug:                  fs.Bool("d", false, "print debug log messages"),
+		listBlocks:             fs.Bool("l", false, "list all blocks"),
+		listBlocksWithContents: fs.Bool("L", false, "list all blocks along with their contents"),
+		nChars:                 fs.Int("n", 30, "number of runes to generate"),
+		ofs:                    fs.String("o", " ", "output field separator"),
+		stream:                 fs.Bool("s", false, "generate an endless stream of runes"),
+		streamDelay:            fs.Duration("D", time.Millisecond*30, "stream delay"),
+		version:                fs.Bool("v", false, "print version"),
+	}
+	if err = fs.Parse(args); err != nil {
+		return mo.Err[*config](err)
+	}
+
+	conf.blocks = []string{"all"}
+	if fs.NArg() > 0 {
+		conf.blocks = fs.Args()
+	}
+
+	slog.Debug("configuration parsed from command line args", "conf", conf, "args", fs.Args())
+
+	return mo.Ok(&conf)
 }
 
 func main() {
+	os.Exit(Main())
+}
+
+func Main() int {
 	rand.Seed(time.Now().UnixNano())
 
-	flag.Usage = usage
+	conf, err := getConf(os.Stderr, os.Args[1:]).Get()
+	if err != nil {
+		slog.Error("error getting flags", err)
+		return 1
+	}
 
-	dumpFlag := flag.Bool("d", false, "dump all blocks")
-	listFlag := flag.Bool("l", false, "list all blocks")
-	nCharsFlag := flag.Int("n", 30, "number of runes to generate")
-	ofsFlag := flag.String("o", " ", "output field separator")
-	streamFlag := flag.Bool("s", false, "generate an endless stream of runes")
-	streamDelayFlag := flag.Duration("D", time.Millisecond*30, "stream delay")
-	versionFlag := flag.Bool("v", false, "print version")
-	flag.Parse()
-
-	if *versionFlag {
+	if *conf.version {
 		fmt.Println(Version)
-		return
+		return 0
 	}
 
-	blocks := []string{"all"}
-	if flag.NArg() > 0 {
-		blocks = flag.Args()
-	}
 	// special value means all blocks
-	if blocks[0] == "all" {
+	if conf.blocks[0] == "all" {
 		// remove "all" value after use
-		blocks = blocks[:0]
+		conf.blocks = conf.blocks[:0]
 		for k := range horeb.Blocks {
-			blocks = append(blocks, k)
+			conf.blocks = append(conf.blocks, k)
 		}
 	}
 
 	switch {
-	case *listFlag:
+	case *conf.listBlocks:
 		horeb.ListBlocks(os.Stdout)
-	case *dumpFlag:
-		horeb.DumpBlocks(os.Stdout)
-	case len(blocks) == 1:
-		b, ok := horeb.Blocks[blocks[0]]
+	case *conf.listBlocksWithContents:
+		horeb.ListBlocksWithContents(os.Stdout)
+
+	// PrintRandom or StreamRandom from a _single_ block.
+	case len(conf.blocks) == 1:
+		b, ok := horeb.Blocks[conf.blocks[0]]
 		if !ok {
 			err := errors.New("unknown block")
-			slog.Error("Unknown block", err, "block", blocks[0])
+			slog.Error("Unknown block", err, "block", conf.blocks[0])
+			return 1
 		}
 
-		if *streamFlag {
-			ticker := time.NewTicker(*streamDelayFlag)
-			for range ticker.C {
-				fmt.Printf("%c%s", b.RandomRune(), *ofsFlag)
-			}
+		if *conf.stream {
+			b.StreamRandom(os.Stdout, *conf.streamDelay, *conf.ofs)
 		} else {
-			b.PrintRandom(os.Stdout, *nCharsFlag, *ofsFlag)
+			b.PrintRandom(os.Stdout, *conf.nChars, *conf.ofs)
 		}
-	case len(blocks) > 1:
+
+	// Print a RandomRune or stream from two or more blocks.
+	case len(conf.blocks) > 1:
 		bm := map[string]horeb.UnicodeBlock{}
-		for _, b := range blocks {
+		for _, b := range conf.blocks {
 			val, ok := horeb.Blocks[b]
 			if !ok {
 				slog.Warn("Unknown block", "block", b)
@@ -86,27 +127,29 @@ func main() {
 		}
 		if len(bm) > 0 {
 			defer fmt.Println()
-			if *streamFlag {
-				ticker := time.NewTicker(*streamDelayFlag)
+			if *conf.stream {
+				ticker := time.NewTicker(*conf.streamDelay)
 				for range ticker.C {
 
 					block, err := horeb.RandomBlock(bm)
 					if err != nil {
 						slog.Error("Error getting random block", err)
-						os.Exit(1)
+						return 1
 					}
-					fmt.Printf("%c%s", block.RandomRune(), *ofsFlag)
+					fmt.Printf("%c%s", block.RandomRune(), *conf.ofs)
 				}
 			} else {
-				for i := 0; i < *nCharsFlag; i++ {
+				for i := 0; i < *conf.nChars; i++ {
 					block, err := horeb.RandomBlock(bm)
 					if err != nil {
 						slog.Error("Error getting random block", err)
-						os.Exit(1)
+						return 1
 					}
-					fmt.Printf("%c%s", block.RandomRune(), *ofsFlag)
+					fmt.Printf("%c%s", block.RandomRune(), *conf.ofs)
 				}
 			}
 		}
 	}
+
+	return 0
 }
