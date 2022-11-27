@@ -2,22 +2,58 @@ before:
   hooks:
     - go mod tidy
 
+release:
+  github:
+    owner: qjcg
+    name: horeb
+  draft: true
+
 builds:
   - main: ./cmd/horeb
+    ldflags:
+      - -s -w -X main.Version={{.Version}}
     env:
       - CGO_ENABLED=0
+    # targets:
+    #   - go_first_class
     goos:
       - linux
-      - windows
       - darwin
+    goamd64:
+      - v3
+    hooks:
+      post:
+        - upx "{{ .Path }}"
 
 archives:
   - replacements:
-      darwin: Darwin
       linux: Linux
+      darwin: Darwin
       windows: Windows
       386: i386
       amd64: x86_64
+    format_overrides:
+      - goos: windows
+        format: zip
+
+nfpms:
+  - maintainer: ${NFPM_MAINTAINER}
+    license: MIT
+    formats:
+      - apk
+      - deb
+      - rpm
+      - archlinux
+
+dockers:
+  - image_templates:
+      - qjcg/horeb:{{ .Tag }}
+      #- qjcg/horeb:v{{ .Major }}
+      #- qjcg/horeb:v{{ .Major }}.{{ .Minor }}
+      - qjcg/horeb:latest
+
+sboms:
+  - artifacts: archive
 
 checksum:
   name_template: 'checksums.txt'
