@@ -17,6 +17,7 @@ func TestMain(m *testing.M) {
 
 func TestCLI(t *testing.T) {
 	testscript.Run(t, testscript.Params{
-		Dir: "testdata",
+		Dir:           "testdata",
+		UpdateScripts: true,
 	})
 }
