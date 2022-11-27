@@ -5,5 +5,5 @@ debug
 build/
 result
 coverprofile.out
-
+.env
 dist/
