@@ -5,3 +5,5 @@ debug
 build/
 result
 coverprofile.out
+
+dist/
