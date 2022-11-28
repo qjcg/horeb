@@ -1,7 +1,7 @@
 # Horeb
 
 ![Build Status](https://img.shields.io/github/workflow/status/qjcg/horeb/Test%20and%20Lint/main)
-![Go Report Card](https://goreportcard.com/badge/github.com/qjcg/horeb)
+[![Go Report Card](https://goreportcard.com/badge/github.com/qjcg/horeb)](https://goreportcard.com/report/github.com/qjcg/horeb)
 ![License](https://img.shields.io/github/license/qjcg/horeb)
 
 ![Mt. Horeb][mt-horeb]
