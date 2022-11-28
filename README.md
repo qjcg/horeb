@@ -70,16 +70,8 @@ $ horeb -L
 
 ## Test
 
-Run main unit test suite:
-
 ```
 make test
-```
-
-Run unit and integration tests:
-
-```sh
-make testall
 ```
 
 
