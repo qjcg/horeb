@@ -115,7 +115,7 @@ func (b UnicodeBlock) PrintRandom(w io.Writer, n int, ofs string) {
 	fmt.Fprintln(w)
 }
 
-// StreamRandom continously writes random runes from UnicodeBlock.
+// StreamRandom continuously writes random runes from UnicodeBlock.
 func (b UnicodeBlock) StreamRandom(w io.Writer, interval time.Duration, ofs string) {
 	for range time.NewTicker(interval).C {
 		fmt.Fprintf(w, "%c%s", b.RandomRune(), ofs)
