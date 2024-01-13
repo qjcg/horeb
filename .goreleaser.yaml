@@ -28,13 +28,7 @@ builds:
         - upx "{{ .Path }}"
 
 archives:
-  - replacements:
-      linux: Linux
-      darwin: Darwin
-      windows: Windows
-      386: i386
-      amd64: x86_64
-    format_overrides:
+  - format_overrides:
       - goos: windows
         format: zip
 
