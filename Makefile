@@ -43,7 +43,7 @@ test-unit:
 
 .PHONY: test-integration
 test-integration:
-	go test -cover -tags integration -v ./...
+	go test -tags integration -v ./...
 
 .PHONY: cover
 cover:
