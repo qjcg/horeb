@@ -15,14 +15,8 @@ builds:
       - -s -w -X main.Version={{ .Version }}
     env:
       - CGO_ENABLED=0
-    # targets:
-    #   - go_first_class
-    goos:
-      - linux
-      - darwin
-    goamd64:
-      - v1
-      - v3
+    targets:
+      - go_first_class
     hooks:
       post:
         - upx "{{ .Path }}"
