@@ -19,7 +19,7 @@ builds:
       - go_first_class
     hooks:
       post:
-        - [ $(uname -s) != Darwin ] && upx "{{ .Path }}"
+        - test $(uname -s) != Darwin && upx "{{ .Path }}"
 
 archives:
   - format_overrides:
