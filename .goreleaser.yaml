@@ -33,6 +33,7 @@ nfpms:
       - apk
       - deb
       - rpm
+      - archlinux
 
 dockers:
   - image_templates:
